@@ -134,28 +134,30 @@
                         <?php
                         function list_categories($parent_id, $cats, $sub='', $product_categories, $primary_category, $groups, $hidden)
                         {
-
-                            foreach ($cats[$parent_id] as $cat):?>
-                            <tr>
-                                <td><?php echo ($hidden)?'<i class="icon-eye-slash">':'';?></i></td>
-                                <td><?php echo  $sub.$cat->name; ?></td>
-                                <?php foreach ($groups as $group):?>
-                                    <td><?php echo ($cat->{'enabled_'.$group->id})?'<i class="icon-check"></i>':'';?></td>
-                                <?php endforeach;?>
-                                <td class="text-center">
-                                    <input type="checkbox" name="categories[]" value="<?php echo $cat->id;?>" <?php echo(in_array($cat->id, $product_categories))?'checked="checked"':'';?>/>
-                                    &nbsp;&nbsp;
-                                    <input type="radio" name="primary_category" value="<?php echo $cat->id;?>" <?php echo ($primary_category == $cat->id)?'checked="checked"':'';?>/>
-                                </td>
-                            </tr>
-                            <?php
-                            if (isset($cats[$cat->id]) && sizeof($cats[$cat->id]) > 0)
+                            if(isset($cats[$parent_id]))
                             {
-                                $sub2 = str_replace('&rarr;&nbsp;', '&nbsp;', $sub);
-                                    $sub2 .=  '&nbsp;&nbsp;&nbsp;&rarr;&nbsp;';
-                                list_categories($cat->id, $cats, $sub2, $product_categories, $primary_category, $groups, $hidden);
+                                foreach ($cats[$parent_id] as $cat):?>
+                                <tr>
+                                    <td><?php echo ($hidden)?'<i class="icon-eye-slash">':'';?></i></td>
+                                    <td><?php echo  $sub.$cat->name; ?></td>
+                                    <?php foreach ($groups as $group):?>
+                                        <td><?php echo ($cat->{'enabled_'.$group->id})?'<i class="icon-check"></i>':'';?></td>
+                                    <?php endforeach;?>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="categories[]" value="<?php echo $cat->id;?>" <?php echo(in_array($cat->id, $product_categories))?'checked="checked"':'';?>/>
+                                        &nbsp;&nbsp;
+                                        <input type="radio" name="primary_category" value="<?php echo $cat->id;?>" <?php echo ($primary_category == $cat->id)?'checked="checked"':'';?>/>
+                                    </td>
+                                </tr>
+                                <?php
+                                if (isset($cats[$cat->id]) && sizeof($cats[$cat->id]) > 0)
+                                {
+                                    $sub2 = str_replace('&rarr;&nbsp;', '&nbsp;', $sub);
+                                        $sub2 .=  '&nbsp;&nbsp;&nbsp;&rarr;&nbsp;';
+                                    list_categories($cat->id, $cats, $sub2, $product_categories, $primary_category, $groups, $hidden);
+                                }
+                                endforeach;
                             }
-                            endforeach;
                         }
 
                         list_categories(-1, $categories, '', $product_categories, $primary_category, $groups, true);
@@ -542,8 +544,8 @@ function addOptionValue(id, name, value, weight, price, limit, isText)
         name:name,
         value:value,
         weight:weight,
-        price,price,
-        limit,limit,
+        price:price,
+        limit:limit,
         isText:isText
     }
     
