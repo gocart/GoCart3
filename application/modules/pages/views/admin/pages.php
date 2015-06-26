@@ -24,7 +24,6 @@ function areyousure()
     <tbody>
         
         <?php
-        define('ADMIN_FOLDER', config_item('admin_folder'));
         function list_pages($parent_id, $pages, $sub='') {
             
             foreach ($pages[$parent_id] as $page):?>
@@ -34,13 +33,13 @@ function areyousure()
                 <td class="text-right">
                     <div class="btn-group">
                         <?php if(!empty($page->url)): ?>
-                            <a class="btn btn-default" href="<?php echo site_url(ADMIN_FOLDER.'/pages/link_form/'.$page->id); ?>"><i class="icon-pencil"></i></a>
+                            <a class="btn btn-default" href="<?php echo site_url('admin/pages/link_form/'.$page->id); ?>"><i class="icon-pencil"></i></a>
                             <a class="btn btn-default" href="<?php echo $page->url;?>" target="_blank"><i class="icon-link"></i></a>
                         <?php else: ?>
-                            <a class="btn btn-default" href="<?php echo site_url(ADMIN_FOLDER.'/pages/form/'.$page->id); ?>"><i class="icon-pencil"></i></a>
+                            <a class="btn btn-default" href="<?php echo site_url('admin/pages/form/'.$page->id); ?>"><i class="icon-pencil"></i></a>
                             <a class="btn btn-default" href="<?php echo site_url('page/'.$page->slug); ?>" target="_blank"><i class="icon-eye"></i></a>
                         <?php endif; ?>
-                        <a class="btn btn-danger" href="<?php echo site_url(ADMIN_FOLDER.'/pages/delete/'.$page->id); ?>" onclick="return areyousure();"><i class="icon-times"></i></a>
+                        <a class="btn btn-danger" href="<?php echo site_url('admin/pages/delete/'.$page->id); ?>" onclick="return areyousure();"><i class="icon-times"></i></a>
                     </div>
                 </td>
             </tr>
