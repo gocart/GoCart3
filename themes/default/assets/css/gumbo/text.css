@@ -1,0 +1,117 @@
+body {
+    font-size: 0.9375em;
+    line-height: 1.65em;
+}
+
+a {
+  color: #134da5;
+}
+a:focus,
+a:hover {
+  color: #de2c3b;
+}
+
+.page-header {
+    border-bottom:1px solid rgba(0,0,0,.35);
+    font-weight:300;
+    font-size:1.3em;
+    padding:0px;
+    margin:15px 0px 1em 0px;
+}
+
+.page-header h1, .page-header h2, .page-header h3, .page-header h4 {
+    font-weight:300;
+} 
+
+.page-header small {
+    color:#999;
+    font-size:.6em;
+}
+
+.section-header {
+    background-color: #ddd;
+    font-weight:400;
+    font-size:1em;
+    padding:0px;
+    margin:15px 0px 1em 0px;
+}
+
+.section-header h1, .section-header h2, .section-header h3, .section-header h4 {
+    font-weight:400;
+    border-bottom:0px;
+} 
+
+.section-header small {
+    color:#999;
+    font-size:.6em;
+}
+
+p {
+    margin:.2em 0px .9em;
+    padding:0px;
+}
+
+.text-left {
+    text-align:left !important;
+}
+
+.text-right {
+    text-align:right !important;
+}
+
+.text-center {
+    text-align:center !important;
+}
+
+h1, h2, h3, h4, h5, h6,
+{
+  color: #000000;
+  text-rendering: optimizeLegibility;
+  margin: 0 0 .5em 0;
+}
+h1, h2 {
+  line-height: 1.1;
+}
+h3, h4 {
+  line-height: 1.3;
+}
+h1, {
+  font-size: 2.25em;
+}
+h2 {
+  font-size: 1.5em;
+  margin-bottom: .7em;
+}
+h3 {
+  font-size: 1.3125em;
+}
+h4 {
+  font-size: 1.125em;
+}
+h5 {
+  font-size: 1em;
+}
+h6 {
+  font-size: 0.75em;
+  text-transform: uppercase;
+}
+
+p,
+td,
+th {
+  line-height: 1.65em;
+}
+
+p {
+  margin-bottom: 1.65em;
+}
+
+hr {
+    height: 1px;
+    color: #ddd;
+    background: #ccc;
+    font-size: 0;
+    border: 0;
+    border-bottom:1px solid #fff;
+    margin:15px 0;
+}

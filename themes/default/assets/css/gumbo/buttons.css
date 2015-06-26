@@ -1,0 +1,109 @@
+/*!
+Pure v0.3.0
+Copyright 2013 Yahoo! Inc. All rights reserved.
+Licensed under the BSD License.
+https://github.com/yui/pure/blob/master/LICENSE.md
+*/
+.btn, button, input[type="submit"], input[type="button"], input[type="reset"] {
+    /* Structure */
+    display: inline-block;
+    white-space: nowrap;
+    text-align: center;
+    cursor: pointer;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border:1px solid rgb(210,210,210);
+    font-size: 100%;
+    padding: 0.5em 1.0em 0.5em;
+    color: rgba(0, 0, 0, 0.80); /* rgba supported */
+    background-color: rgb(230,230,230);
+    text-decoration: none;
+    /* Transitions */
+    -webkit-transition: 0.1s linear -webkit-box-shadow;
+    -moz-transition: 0.1s linear -moz-box-shadow;
+    -ms-transition: 0.1s linear box-shadow;
+    -o-transition: 0.1s linear box-shadow;
+    transition: 0.1s linear box-shadow;
+    font-size: 1em;
+    line-height: normal;
+}
+
+/* Firefox: Get rid of the inner focus border */
+.btn::-moz-focus-inner, button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="button"]::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+button:focus, input[type="submit"]:focus, input[type="button"]:focus, input[type="reset"]:focus,
+button:hover, input[type="submit"]:hover, input[type="button"]:hover, input[type="reset"]:hover,
+.btn-hover,
+.btn:hover,
+.btn:focus,
+a.btn-hover,
+a.btn:hover,
+a.btn:focus {
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), color-stop(40%, rgba(0,0,0, 0)), to(rgba(0,0,0, 0.15)));
+    background-image: -webkit-linear-gradient(transparent, rgba(0,0,0, 0) 40%, rgba(0,0,0, 0.15));
+    background-image: -moz-linear-gradient(top, rgba(0,0,0, 0) 0%, rgba(0,0,0, 0.15));
+    background-image: -ms-linear-gradient(transparent, rgba(0,0,0, 0) 40%, rgba(0,0,0, 0.15));
+    background-image: -o-linear-gradient(transparent, rgba(0,0,0, 0) 40%, rgba(0,0,0, 0.15));
+    background-image: linear-gradient(transparent, rgba(0,0,0, 0) 40%, rgba(0,0,0, 0.15));
+    outline: 0;
+    color: rgba(0, 0, 0, 0.80); /* rgba supported */
+}
+
+button:active, input[type="submit"]:active, input[type="button"]:active,input[type="reset"]:active, 
+.btn-active,
+.btn:active {
+    box-shadow: 0 0 0 1px rgba(0,0,0, 0.15) inset, 0 0 6px rgba(0,0,0, 0.15) inset;
+}
+
+button:disabled, input[type="submit"]:disabled, input[type="button"]:disabled,input[type="reset"]:disabled,
+.btn[disabled],
+.btn-disabled,
+.btn-disabled:hover,
+.btn-disabled:focus,
+.btn-disabled:active {
+    border: none;
+    background-image: none;
+    opacity: 0.40;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-hidden {
+    display: none;
+}
+
+/* Custom Gumbo with some Bootstrap3 influence */
+.btn-group {
+    display:table;
+    margin-bottom:15px;
+    width:100%;
+}
+
+.btn-group>* {
+    display:table-cell !important;
+}
+
+/* Give a particular item in the group priority */
+.btn-group>.priority {
+    width:100%;
+}
+
+.btn-group>*>* {
+    display:block;
+}
+.btn-group>*, .btn-group>*>* {
+    border-radius:0px !important;
+    margin:0px !important;
+    border-right-width: 0px;
+    vertical-align: middle;
+}
+
+.btn-group>*:last-child, .btn-group>*:last-child>* {
+    border-left-width: 1px;
+}

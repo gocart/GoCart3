@@ -1,0 +1,1 @@
+php_flag opcache.enable Off

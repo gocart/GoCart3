@@ -1,0 +1,40 @@
+body {
+    font-size:14px;
+}
+
+.container {
+    width:980px;
+    padding:0px 20px;
+    margin:auto;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+@media(min-width:1200px) {
+    .container {
+        width:1140px;
+    }
+}
+
+@media (max-width:979px) {
+    .container {
+        width:100%;
+    }
+}
+
+.container:before, .container:after {content: " ";display: block;}
+.container:after {clear: both;}
+
+img{max-width:100%;}
+
+.clear {
+    clear:both;
+}
+
+.pull-right {
+    float:right !important;
+}
+.pull-left {
+    float:left !important;
+}

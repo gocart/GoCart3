@@ -1,0 +1,180 @@
+.col-nest {
+    margin-left:-10px;
+    margin-right:-10px;
+}
+.col-nest:after {
+    content: "";
+    display: block;
+    clear: both;
+    height:0;
+    overflow:hidden;
+}
+
+.col {
+    float:left;
+    padding:0px 10px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    min-height:1px;
+}
+
+.col-nest-inline {
+    margin-left:-10px;
+    margin-right:-10px;
+    font-size:0px;
+}
+.col-nest-inline .col{
+    float:none;
+    font-size:1rem;
+    display:inline-block;
+}
+
+
+[data-cols = '1'],[data-cols = '2/2'],[data-cols = '3/3'],[data-cols = '4/4'],[data-cols = '5/5'],[data-cols = '6/6'],[data-cols = '7/7'] { width:100%; }
+[data-cols = '1/2'],[data-cols = '2/4'],[data-cols = '3/6'] { width:50%; }
+[data-cols = '1/3'], [data-cols = '2/6'] { width:33.333%; }
+[data-cols = '2/3'], [data-cols = '4/6'] { width:66.666%; }
+[data-cols = '1/4'] { width:25%; }
+[data-cols = '3/4'] { width:75%; }
+[data-cols = '1/5'] { width:20%; }
+[data-cols = '2/5'] { width:40%; }
+[data-cols = '3/5'] { width:60%; }
+[data-cols = '4/5'] { width:80%; }
+[data-cols = '1/6'] { width:16.6666667%; }
+[data-cols = '5/6'] { width:83.3333335%; }
+[data-cols = '5/6'] { width:83.3333335%; }
+[data-cols = '1/7'] { width: 14.2857%; }
+[data-cols = '2/7'] { width: 28.5714%; }
+[data-cols = '3/7'] { width: 42.8571%; }
+[data-cols = '4/7'] { width: 57.1428%; }
+[data-cols = '5/7'] { width: 71.4285%; }
+[data-cols = '6/7'] { width: 85.7142%; }
+
+[data-push = '1/2'],[data-push = '2/4'],[data-push = '3/6'] { margin-left:50%; }
+[data-push = '1/3'], [data-push = '2/6'] { margin-left:33.333%; }
+[data-push = '2/3'], [data-push = '4/6'] { margin-left:66.666%; }
+[data-push = '1/4'] { margin-left:25%; }
+[data-push = '3/4'] { margin-left:75%; }
+[data-push = '1/5'] { margin-left:20%; }
+[data-push = '2/5'] { margin-left:40%; }
+[data-push = '3/5'] { margin-left:60%; }
+[data-push = '4/5'] { margin-left:80%; }
+[data-push = '1/6'] { margin-left:16.6666667%; }
+[data-push = '5/6'] { margin-left:83.3333335%; }
+[data-push = '1/7'] { margin-left: 14.2857%; }
+[data-push = '2/7'] { margin-left: 28.5714%; }
+[data-push = '3/7'] { margin-left: 42.8571%; }
+[data-push = '4/7'] { margin-left: 57.1428%; }
+[data-push = '5/7'] { margin-left: 71.4285%; }
+[data-push = '6/7'] { margin-left: 85.7142%; }
+
+br.medium {
+    display:none;
+}
+br.small {
+    display:none;
+}
+
+@media (max-width:768px) {
+    [data-cols]
+    {
+        width:100%;
+    }
+    [data-push]
+    {
+        margin-left:0px;
+    }
+}
+
+@media (max-width:980px) and (min-width:481px) {
+
+    br.medium {
+        display:block;
+        clear:both;
+    }
+
+    [data-medium-cols = '1'],[data-medium-cols = '2/2'],[data-medium-cols = '3/3'],[data-medium-cols = '4/4'],[data-medium-cols = '5/5'],[data-medium-cols = '6/6'],[data-medium-cols = '7/7'] { width:100% !important; }
+    [data-medium-cols = '1/2'],[data-medium-cols = '2/4'],[data-medium-cols = '3/6'] { width:50% !important; }
+    [data-medium-cols = '1/3'], [data-medium-cols = '2/6'] { width:33.333% !important; }
+    [data-medium-cols = '2/3'], [data-medium-cols = '4/6'] { width:66.666% !important; }
+    [data-medium-cols = '1/4'] { width:25% !important; }
+    [data-medium-cols = '3/4'] { width:75% !important; }
+    [data-medium-cols = '1/5'] { width:20% !important; }
+    [data-medium-cols = '2/5'] { width:40% !important; }
+    [data-medium-cols = '3/5'] { width:60% !important; }
+    [data-medium-cols = '4/5'] { width:80% !important; }
+    [data-medium-cols = '1/6'] { width:16.6666667% !important; }
+    [data-medium-cols = '5/6'] { width:83.3333335% !important; }
+    [data-medium-cols = '5/6'] { width:83.3333335% !important; }
+    [data-medium-cols = '1/7'] { width: 14.2857% !important; }
+    [data-medium-cols = '2/7'] { width: 28.5714% !important; }
+    [data-medium-cols = '3/7'] { width: 42.8571% !important; }
+    [data-medium-cols = '4/7'] { width: 57.1428% !important; }
+    [data-medium-cols = '5/7'] { width: 71.4285% !important; }
+    [data-medium-cols = '6/7'] { width: 85.7142% !important; }
+
+    [data-medium-push = '1/2'],[data-medium-push = '2/4'],[data-medium-push = '3/6'] { margin-left:50% !important; }
+    [data-medium-push = '1/3'], [data-medium-push = '2/6'] { margin-left:33.333% !important; }
+    [data-medium-push = '2/3'], [data-medium-push = '4/6'] { margin-left:66.666% !important; }
+    [data-medium-push = '1/4'] { margin-left:25% !important; }
+    [data-medium-push = '3/4'] { margin-left:75% !important; }
+    [data-medium-push = '1/5'] { margin-left:20% !important; }
+    [data-medium-push = '2/5'] { margin-left:40% !important; }
+    [data-medium-push = '3/5'] { margin-left:60% !important; }
+    [data-medium-push = '4/5'] { margin-left:80% !important; }
+    [data-medium-push = '1/6'] { margin-left:16.6666667% !important; }
+    [data-medium-push = '5/6'] { margin-left:83.3333335% !important; }
+    [data-medium-push = '1/7'] { margin-left: 14.2857% !important; }
+    [data-medium-push = '2/7'] { margin-left: 28.5714% !important; }
+    [data-medium-push = '3/7'] { margin-left: 42.8571% !important; }
+    [data-medium-push = '4/7'] { margin-left: 57.1428% !important; }
+    [data-medium-push = '5/7'] { margin-left: 71.4285% !important; }
+    [data-medium-push = '6/7'] { margin-left: 85.7142% !important; }
+}
+
+@media(max-width:480px) {
+
+    br.small {
+        display:block;
+        clear:both;
+    }
+
+    [data-small-cols = '1'],[data-small-cols = '2/2'],[data-small-cols = '3/3'],[data-small-cols = '4/4'],[data-small-cols = '5/5'],[data-small-cols = '6/6'],[data-small-cols = '7/7'] { width:100% !important; }
+    [data-small-cols = '1/2'],[data-small-cols = '2/4'],[data-small-cols = '3/6'] { width:50% !important; }
+    [data-small-cols = '1/3'], [data-small-cols = '2/6'] { width:33.333% !important; }
+    [data-small-cols = '2/3'], [data-small-cols = '4/6'] { width:66.666% !important; }
+    [data-small-cols = '1/4'] { width:25% !important; }
+    [data-small-cols = '3/4'] { width:75% !important; }
+    [data-small-cols = '1/5'] { width:20% !important; }
+    [data-small-cols = '2/5'] { width:40% !important; }
+    [data-small-cols = '3/5'] { width:60% !important; }
+    [data-small-cols = '4/5'] { width:80% !important; }
+    [data-small-cols = '1/6'] { width:16.6666667% !important; }
+    [data-small-cols = '5/6'] { width:83.3333335% !important; }
+    [data-small-cols = '5/6'] { width:83.3333335% !important; }
+    [data-small-cols = '1/7'] { width: 14.2857% !important; }
+    [data-small-cols = '2/7'] { width: 28.5714% !important; }
+    [data-small-cols = '3/7'] { width: 42.8571% !important; }
+    [data-small-cols = '4/7'] { width: 57.1428% !important; }
+    [data-small-cols = '5/7'] { width: 71.4285% !important; }
+    [data-small-cols = '6/7'] { width: 85.7142% !important; }
+
+    [data-small-push = '1/2'],[data-small-push = '2/4'],[data-small-push = '3/6'] { margin-left:50% !important; }
+    [data-small-push = '1/3'], [data-small-push = '2/6'] { margin-left:33.333% !important; }
+    [data-small-push = '2/3'], [data-small-push = '4/6'] { margin-left:66.666% !important; }
+    [data-small-push = '1/4'] { margin-left:25% !important; }
+    [data-small-push = '3/4'] { margin-left:75% !important; }
+    [data-small-push = '1/5'] { margin-left:20% !important; }
+    [data-small-push = '2/5'] { margin-left:40% !important; }
+    [data-small-push = '3/5'] { margin-left:60% !important; }
+    [data-small-push = '4/5'] { margin-left:80% !important; }
+    [data-small-push = '1/6'] { margin-left:16.6666667% !important; }
+    [data-small-push = '5/6'] { margin-left:83.3333335% !important; }
+    [data-small-push = '1/7'] { margin-left: 14.2857% !important; }
+    [data-small-push = '2/7'] { margin-left: 28.5714% !important; }
+    [data-small-push = '3/7'] { margin-left: 42.8571% !important; }
+    [data-small-push = '4/7'] { margin-left: 57.1428% !important; }
+    [data-small-push = '5/7'] { margin-left: 71.4285% !important; }
+    [data-small-push = '6/7'] { margin-left: 85.7142% !important; }
+}

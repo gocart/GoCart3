@@ -1,0 +1,75 @@
+table {
+  max-width: 100%;
+  width: 100%;
+  empty-cells: show;
+}
+table caption {
+  text-transform: uppercase;
+  padding: 0 1.0999999999999999em;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 12.75px;
+}
+table th,
+table td {
+  border-bottom: 1px solid #eeeeee;
+  padding: 0.825em 1.0999999999999999em;
+}
+table tfoot th,
+table tfoot td {
+  color: rgba(0, 0, 0, 0.4);
+} 
+
+.table-respond {
+    overflow-x:auto;
+}
+
+.table {
+    width:100%;
+}
+
+.table thead tr th, .table tbody tr td, .table tfoot tr td{
+    text-align:left;
+    padding:8px 10px;
+}
+
+ .table tfoot tr td {
+    font-weight:bold;
+    border-top:1px solid #ddd;
+ }
+
+.table thead tr th {
+    font-size:1.2em;
+    border-bottom:3px solid #ddd;
+}
+
+.table.vertical-border td, .table.bordered td, .table.vertical-border th, .table.bordered th{
+    border-left:1px solid #ddd;
+}
+
+.table.vertical-border tr:last-child td{
+    border-bottom:1px solid #ddd;
+}
+
+.table.vertical-border th {
+    border-top:1px solid #ddd;
+}
+
+.table.vertical-border td:last-child, .table.bordered td:last-child, .table.vertical-border th:last-child, .table.bordered th:last-child{
+    border-right:1px solid #ddd;
+}
+
+.table.horizontal-border td, .table.bordered td{
+    border-bottom:1px solid #ddd;
+}
+
+.table.bordered {
+    border:1px solid #ddd;
+}
+
+.table.zebra tbody tr:nth-child(even) td{
+    background-color:#eee;
+}
+
+.table.hover tbody tr:hover td{
+    background-color:rgba(0,0,0,.1);
+}

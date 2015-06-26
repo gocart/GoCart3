@@ -1,0 +1,24 @@
+body { padding-top: 70px; }
+img { max-width:100%; }
+fieldset { margin-bottom:15px; }
+.tab-pane {
+    padding:20px;
+    padding-bottom:10px;
+    border:1px solid #ddd;
+    border-top:0px;
+    margin-bottom:15px;
+}
+.orderTotals *{
+    text-align:right !important;
+    font-weight:bold;
+    background-color:#f8f8f8;
+}
+
+.orderItems>tr>td:last-of-type {
+    text-align:right;
+    font-weight:bold;
+}
+
+.tableInput {
+    max-width:100px;
+}

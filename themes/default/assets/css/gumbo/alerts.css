@@ -1,0 +1,49 @@
+.alert {
+    padding:1.0em;
+    margin:1.5em 0;
+    background-color: rgb(230,230,230);
+    position:relative;
+}
+
+.alert strong {
+    display:block;
+    color:inherit !important;
+}
+
+/* this should give us uniform padding all around */
+.alert>*:last-child {
+    margin-bottom:0;
+}
+
+.alert a, .alert a:focus {
+    cursor: pointer;
+    opacity: .3;
+    font-weight: 700;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    text-decoration: none;
+}
+
+.alert a:hover {
+    opacity:.4;
+    color: #000;
+}
+
+.close {
+    cursor: pointer;
+    opacity: .2;
+    font-size: 21px;
+    line-height:1;
+    font-weight: 700;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    position:absolute;
+    top:5px;
+    right:10px;
+}
+.close:hover{
+    opacity: .6;
+}
+.close:before{
+    content:"\00d7";
+}

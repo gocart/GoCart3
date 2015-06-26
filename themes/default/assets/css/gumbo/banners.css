@@ -1,0 +1,64 @@
+.banners {
+    position:relative;
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+    margin-bottom:15px;
+}
+
+.banners * {
+     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
+.banners .banner {
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:100%;
+}
+
+.banners .banner img {
+    width:100%;
+    display:block;
+}
+
+.banner .caption {
+    background-color:rgba(30,30,30, .7);
+    color:#fff;
+    text-align: center;
+    position:absolute;
+    bottom:0px;
+    width:100%;
+    padding:10px;
+}
+.banners .controls {
+    font-size:30px;
+    line-height:30px;
+    text-decoration:none;
+    position:absolute;
+    top:50%;
+    margin-top:-15px;
+    margin-left:10px;
+    z-index:100;
+    display:none;   
+    outline:none;
+    cursor: pointer;
+    opacity: .2;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+}
+
+.banners .controls:hover {
+    opacity: .6;
+}
+
+.banners .controls[data-direction = "forward"] {
+    right:10px;
+}
+
+.banner-timer {
+    position:absolute;
+    bottom:0px;
+    height:5px;
+    background-color:#000;
+    opacity:.25;
+    width:0;
+}
