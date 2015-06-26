@@ -177,7 +177,12 @@
         }
 
 
-
+        code {
+            width:100%;
+            display:block;
+            overflow:auto;
+            padding:15px 20px;
+        }
         @media (max-width:850px) {
 
             .hand {
@@ -270,6 +275,28 @@
         <li><a href="#ug_coupons">Coupons</a></li>
         <li><a href="#ug_gift_cards">Gift Cards</a></li>
         <li><a href="#ug_canned_messages">Canned Messages</a></li>
+    </ul>
+    
+
+    <div class="title">Developer Guide</div>
+    <ul>
+        <li><a href="#dg_introduction">Introduction</a></li>
+        <li><a href="#dg_core">The Core</a></li>
+        <li><a href="#dg_codeigniter">What Happened to CodeIgniter?</a>
+            <ul>
+                <li><a href="#dg_codeigniter_super_object">CodeIgniter Super Object</a></li>
+                <li><a href="#dg_codeigniter_sessions">Sessions</a></li>
+                <li><a href="#dg_codeigniter_views">Views</a></li>
+            </ul>
+        </li>
+        <li><a href="#dg_modules">What Are Modules</a></li>
+        <li><a href="#dg_manifest">The Manifest File</a></li>
+        <li><a href="#dg_themes">Themes</a>
+            <ul>
+                <li><a href="#dg_theme_shortcodes">Shortcodes</a></li>
+            </ul>
+        </li>
+        <li><a href="#dg_altorouter">AltoRouter</a></li>
     </ul>
 </nav>
 <main>
@@ -1037,6 +1064,245 @@
                         </ul>
                     </li>
                 </ul>
+            </p>
+        </section>
+
+
+
+        <a name="dg_introduction"></a>
+        <h1>Developer Guide</h1>
+        
+        <section>
+            <h3 class="title">Introduction</h3>
+            <p>
+                GoCart 3 represents a shift in the development framework. With the exception of a few extended or replaced libraries GoCart has always
+                been built on a relatively vanilla install of CodeIgniter. With GoCart 3, we decided to make some major changes.
+            </p>
+
+            <p>
+                While GoCart is still based on CodeIgniter (version 3), we decided to replace some fundamental pieces in order to more fully realize our
+                goals and set the foundation for the future of our platform.
+            </p>
+        </section>
+
+        <section>
+            <a name="dg_core"></a>
+            
+            <h3 class="title">The Core</h3>
+            <p>
+                GoCart 3 begins by utilizing a feature in CodeIgniter to bypass the routing system and set a default controller and method. We're using this
+                to direct CodeIgniter to the bootstrap controllers init method. This method is now the heart of GoCart.
+            </p>
+
+            <p>
+                The bootstrap controller has a big job.
+                <ol>
+                    <li>Initiate the session</li>
+                    <li>Load the <a class="tag" href="#dg_manifest">manifest</a> configuration file.
+                        <ul>
+                            <li>If there is no manifest file, we generate one based on the <a class="tag" href="#dg_modules">modules</a> we find.</li>
+                        </ul>
+                    </li>
+                    <li>Autoload some essential libraries, helpers, and models.</li>
+                    <li>Set GoCart configuration from the database into the Config class.</li>
+                    <li>Initialize any HTTP Authentication as designated by the GoCart configuration.</li>
+                    <li>Load <a class="tag" href="#dg_altorouter">AltoRouter</a>, parse the URI route and load the appropriate controller/method combination.</li>
+                </ol>
+            </p>
+        </section>
+
+        <section>
+            <a name="dg_codeigniter"></a>
+            
+            <h3 class="title">What Happened to CodeIgniter?</h3>
+            <p>
+                CodeIgniter is still the framework that underpins GoCart but because of the organization we were going for, we had to make adjustments.
+                CodeIgniter has really poor support for modules out of the box and the popular HMVC extension didn't quite do what we wanted either. CodeIgniter
+                also has poor support for namespaces.
+            </p>
+            
+            <p>
+                Our adjustments overcome this by accessing CodeIgniter through a static class and mapping routes manually through <a class="tag" href="#dg_altorouter">AltoRouter</a>. Rather than a controller inheriting
+                the CodeIgniter super object, a Controller accesses CodeIgniter through the static facade.
+            </p>
+
+            <a name="dg_codeigniter_super_object"></a>
+            <p>
+                <h5>CodeIgniter Super Object</h5>
+                The static facade stores the CodeIgniter object in a private variable and references it through the __callStatic magic method. This enables us to
+                access CodeIgniter from anywhere in GoCart with ease.
+            </p>
+            <p>
+                Because the modules support namespacing we want to prepend the CodeIgniter static class with a backslash to reference the root namespace. Rather than
+                accessing a CodeIgniter library or model like this:
+            </p>
+            <p>    
+                <code>
+                    $this->library->method();
+                </code>
+            </p>
+            <p>
+                We access it like this:
+            </p>
+            <p>
+                <code>
+                    \CI::Library()->method();
+                </code>
+            </p>
+
+            <a name="dg_codeigniter_sessions"></a>
+            <p>
+                <h5>Sessions</h5>
+                The CodeIgniter session class has always cause a few problems for GoCart. Because of this GoCart has been using it's own session class for several releases now. GoCart 3
+                continues this trend. The session class in GoCart 3 is very similar to the Session library from CodeIgniter 2.* with the exception that it utilizes native sessions.
+            </p>
+
+            <a name="dg_codeigniter_views"></a>
+            <p>
+                <h5>Views</h5>
+                GoCart 3 no longer utilizes the CodeIgniter view class. Rather we have a custom built view class that operates better within the new module based organization.
+            </p>
+            <p>
+                The new View class has two methods <strong>view</strong> which displays the contents of a view file and <strong>get</strong> which returns the contents as a string. The Front &amp; Admin Core controller
+                classes expand the functionality of the View class by allowing a controller to automatically include a header and footer. Controllers can access a view without the header and footer by referencing the <strong>partial</strong>
+                method.
+            </p>
+            <p>
+                These two additional methods are accessible within any controller that extends Front or Admin via <strong>$this-></strong>.
+            </p>
+        </section>
+        <section>
+            <a name="dg_modules"></a>
+            
+            <h3 class="title">What Are Modules</h3>
+            <p>
+                Modules are compartmentalized components. This is an organizational method that enables modules to be aware of themselves and replaced without
+                having a major impact on the rest of the system.
+            </p>
+
+            <p>
+                It's important to note that GoCart 3 has two folders where modules can be stored.
+                <ol>
+                    <li>/application/modules</li>
+                    <li>/addons</li>
+                </ol>
+                
+                The modules located in the application/modules folder are core components. While they are compartmentalized there are places where they are more tightly coupled
+                with other modules than you would find in an addon module. Each module should contain the files for it's own controllers, views, models, language files and <a class="tag" href="#dg_manifest">manifest</a>.
+            </p>
+        </section>
+
+        <section>
+            <a name="dg_manifest"></a>
+            
+            <h3 class="title">The Manifest File</h3>
+            <p>
+                GoCart has many manifest files. Each module whether an addon or core module requires a manifest file. The manifest file contains the routes for a particular module
+                as well as any additional information the module needs to provide GoCart. In the case of addons such as payment or shipping methods, the manifest file will add the module
+                to GoCarts list of available shipping and payment methods.
+            </p>
+            <p>
+                When GoCart initiates if there is no master manifest file found in the application/config folder, GoCart will loop through every addon and collect the manifest file. From here
+                GoCart will make a single master manifest file that includes the routes, shipping methods, payment methods, and a classmap (for autoloading).
+            </p>
+            <p>
+                When adding new modules to GoCart or manipulating classnames or routes etc. within a module, the master manifest file must be deleted so GoCart can properly refresh the information
+                contained within.
+            </p>
+            <p>
+                The formatting for a route, shipping module, and payment module within the manifest file is as follows.
+            </p>
+            
+                <h5>Routes</h5>
+            <p>
+                <code>
+                    $routes[] = ['HTTP VERB', 'uri/route/to/map/to', 'Namespace\Classname#method'];
+                </code>
+            </p>
+            <p>
+                For more information about supported HTTP Verbs, URI routes check out the <a class="tag" href="#dg_altorouter">AltoRouter</a> section
+            </p>
+            <p>
+                <h5>Shipping Method</h5>
+                <code>
+                    $shippingModules[] = ['name'=>'Shipping Method Name', 'key'=>'Database Key', 'class'=>'Class Name'];
+                </code>
+            </p>
+            <p>
+                <h5>Payment Method</h5>
+                <code>
+                    $paymentModules[] = ['name'=>'Payment Method Name', 'key'=>'Database Key', 'class'=>'Class Name'];
+                </code>
+            </p>
+            <p>
+                GoCart comes with a basic shipping (flat rate) and payment (COD) module that are there as a starting place for developing your own shipping and payment methods.
+                These built in modules have all the required methods stubbed out to make integrations easier.
+            </p>
+        </section>
+
+        <section>
+            <a name="dg_themes"></a>
+            
+            <h3 class="title">Themes</h3>
+            <p>
+                GoCart themes are located in the base folder under the themes directory.
+            </p>
+            <p>
+                By default, GoCart views are coupled with the module they are associated with. Themes allow developers
+                to override module level views. To override a module view simply create a view in your theme with the same filename as the view you want to override. The new GoCart 3 <a class="tag" href="#dg_codeigniter_views">view class</a>
+                will automatically pick the view file from your theme instead of the one located in the module.
+            </p>
+            
+            <a name="dg_theme_shortcodes"></a>
+            <p>
+                <h5>Shortcodes</h5>
+                GoCart 3 is laying the foundation for shortcode support in themes. The default theme supports shortcodes for categories and banners. To create additional short codes, open the following file. <br>
+            </p>
+            <p>
+                <strong>themes/default/helpers/content_filter.php</strong>
+            </p>
+            <p>
+                From here you can see how shortcodes are found and replaced throughout page content. To create a new shortcode simply add the shortcode keyword to the $content_filters array as a key with the value being
+                the name of the function that will process the shortcode. Your function should return the contents that will be used as a replacement for the shortcode in your page content.
+            </p>
+        </section>
+
+        <section>
+            <a name="dg_altorouter"></a>
+            
+            <h3 class="title">AltoRouter</h3>
+            <p>
+                GoCart 3 uses AltoRouter for mapping controllers and methods to URLs. AltoRouter was chosen because it's lightweight and flexible and was easily implemented.
+            </p>
+            <p>
+                Rather than offering an exhaustive explaination of how AltoRouter works, we will simply explain some simple URI formatting examples here. For more in depth information
+                on AltoRouter you can read it's documentation at <a href="http://altorouter.com">altorouter.com</a>.
+            </p>
+            <p>
+                AltoRouter supports several HTTP verbs. The modules in GoCart thus far only utilize two, GET and POST though there is nothing stopping someone from using the others.
+                The supported verbs are:
+                <ul>
+                    <li>GET</li>
+                    <li>POST</li>
+                    <li>PATCH</li>
+                    <li>PUT</li>
+                    <li>DELETE</li>
+                </ul>
+
+                To use multiple HTTP verbs on a single request separate them with a pipe <small><em>ex. GET|POST</em></small>.
+            </p>
+            
+            <p>
+                AltoRouter can accept a URI segment as a specific variable type. A URI variable is encased in square brackets and optionally prefixed with a requirement for what sort of variable
+                should be accepted.
+            </p>
+            
+            <p>
+                GoCart generally uses the blank prefix and the "i" prefix for most needs. <small><em>ex. [:varname] or [i:intName]</em></small>. You can follow the square brackets with a "?" for an optional variable.
+            </p>
+
+            <p>
+                To learn more about AltoRouter check out it's website at <a href="http://altorouter.com">altorouter.com</a>.
             </p>
         </section>
     </div>
