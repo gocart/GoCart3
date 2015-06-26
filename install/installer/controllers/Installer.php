@@ -58,7 +58,7 @@ class Installer extends CI_Controller {
 			$sql = str_replace('gc_', $dbCred['prefix'], file_get_contents(FCPATH.'database.sql'));
 
 			$db->multi_query($sql); // run the dump
-			while ($db->next_result()) {;} //run through it
+			while ($db->more_results() && $db->next_result()) {;} //run through it
 
 			//set some basic information in settings
 			$query = "INSERT INTO `{$dbCred['prefix']}settings` (`code`, `setting_key`, `setting`) VALUES
