@@ -61,7 +61,6 @@ class AdminGiftCards extends Admin{
             $save['from'] = \CI::input()->post('from');
             $save['personal_message'] = \CI::input()->post('personal_message');
             $save['beginning_amount'] = \CI::input()->post('beginning_amount');
-            $save['activated'] = 1;
 
             \CI::GiftCards()->saveCard($save);
 
@@ -99,66 +98,11 @@ class AdminGiftCards extends Admin{
 
     }
 
-    public function activate($code)
-    {
-        \CI::GiftCards()->activate($code);
-        \CI::GiftCards()->sendNotification($code);
-        \CI::session()->set_flashdata('message', lang('message_activated_gift_card'));
-        redirect('admin/gift-cards');
-    }
-
     public function delete($id)
     {
         \CI::GiftCards()->delete($id);
 
         \CI::session()->set_flashdata('message', lang('message_deleted_gift_card'));
         redirect('admin/gift-cards');
-    }
-
-    // Gift card public functionality
-    public function enable()
-    {
-
-        $config['predefined_card_amounts'] = "10,20,25,50,100";
-        $config['allow_custom_amount'] = "1";
-        $config['enabled'] = '1';
-        \CI::Settings()->save_settings('gift_cards', $config);
-        redirect('admin/gift-cards');
-    }
-
-    public function disable()
-    {
-        $config['enabled'] = '0';
-        \CI::Settings()->save_settings('gift_cards', $config);
-        redirect('admin/gift-cards');
-    }
-
-    public function settings()
-    {
-        $gc_settings = \CI::Settings()->get_settings('gift_cards');
-
-        $data['predefined_card_amounts'] = $gc_settings['predefined_card_amounts'];
-        $data['allow_custom_amount'] = $gc_settings['allow_custom_amount'];
-
-        \CI::form_validation()->set_rules('predefined_card_amounts', 'lang:predefined_card_amounts', 'trim');
-        \CI::form_validation()->set_rules('allow_custom_amount', 'lang:allow_custom_amounts', 'trim');
-
-        $data['page_title'] = lang('gift_card_settings');
-
-        if (\CI::form_validation()->run() == FALSE)
-        {
-            $this->view('gift_cards_settings', $data);
-        }
-        else
-        {
-            $save['predefined_card_amounts'] = \CI::input()->post('predefined_card_amounts');
-            $save['allow_custom_amount'] = \CI::input()->post('allow_custom_amount');
-
-            \CI::Settings()->save_settings('gift_cards', $save);
-
-            \CI::session()->set_flashdata('message', lang('message_saved_settings'));
-
-            redirect('admin/gift-cards');
-        }
     }
 }
