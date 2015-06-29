@@ -4389,7 +4389,7 @@ CREATE TABLE `gc_options` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `gc_order_items` (
-  `id` int(9) unsigned NOT NULL,
+  `id` int(9) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` int(9) unsigned NOT NULL,
   `product_id` int(9) unsigned NOT NULL,
   `is_giftcard` tinyint(1) NOT NULL DEFAULT '0',
