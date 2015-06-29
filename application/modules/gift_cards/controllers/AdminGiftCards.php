@@ -66,29 +66,7 @@ class AdminGiftCards extends Admin{
 
             if(\CI::input()->post('sendNotification'))
             {
-                //get the canned message for gift cards
-                $row = \CI::db()->where('id', '1')->get('canned_messages')->row_array();
-
-                // set replacement values for subject & body
-                $row['subject'] = str_replace('{from}', $save['from'], $row['subject']);
-                $row['subject'] = str_replace('{site_name}', config_item('company_name'), $row['subject']);
-
-                $row['content'] = str_replace('{code}', $save['code'], $row['content']);
-                $row['content'] = str_replace('{amount}', $save['beginning_amount'], $row['content']);
-                $row['content'] = str_replace('{from}', $save['from'], $row['content']);
-                $row['content'] = str_replace('{personal_message}', nl2br($save['personal_message']), $row['content']);
-                $row['content'] = str_replace('{url}', config_item('base_url'), $row['content']);
-                $row['content'] = str_replace('{site_name}', config_item('company_name'), $row['content']);
-
-                $config['mailtype'] = 'html';
-                \CI::load()->library('email');
-                \CI::email()->initialize($config);
-                \CI::email()->from(config_item('email'));
-                \CI::email()->to($save['to_email']);
-                \CI::email()->subject($row['subject']);
-                \CI::email()->message($row['content']);
-                \CI::email()->send();
-                
+                \GoCart\Emails::giftCardNotification($save);
             }
 
             \CI::session()->set_flashdata('message', lang('message_saved_gift_card'));
