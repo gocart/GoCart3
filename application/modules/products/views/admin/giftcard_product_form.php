@@ -232,9 +232,6 @@ function remove_option(id)
             <button type="submit" class="btn btn-primary"><?php echo lang('save');?></button>
         </div>
         <div class="col-md-3">
-            <div class="form-group">
-                <?php echo form_dropdown('enabled', [0 => lang('disabled'), 1 => lang('enabled')], assign_value('enabled',$enabled), 'class="form-control"'); ?>
-            </div>
 
             <div class="form-group">
                 <?php echo form_dropdown('taxable', [0 => lang('not_taxable'), 1 => lang('taxable')], assign_value('taxable',$taxable), 'class="form-control"'); ?>
@@ -245,10 +242,18 @@ function remove_option(id)
                 <?php echo form_input(['name'=>'sku', 'value'=>assign_value('sku', $sku), 'class'=>'form-control']);?>
             </div>
 
-            <div class="form-group">
-                <label for="price"><?php echo lang('price');?></label>
-                <?php echo form_input(['name'=>'price', 'value'=>assign_value('price', $price), 'class'=>'form-control']);?>
-            </div>
+            <?php foreach($groups as $group):?>
+                <fieldset>
+                    <legend>
+                        <?php echo $group->name;?>
+                        <div class="checkbox pull-right" style="font-size:16px; margin-top:5px;">
+                            <label>
+                                <?php echo form_checkbox('enabled_'.$group->id, 1, ${'enabled_'.$group->id}); ?> <?php echo lang('enabled');?>
+                            </label>
+                        </div>
+                    </legend>
+                </fieldset>
+            <?php endforeach;?>
 
         </div>
     </div>

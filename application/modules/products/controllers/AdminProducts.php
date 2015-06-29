@@ -453,6 +453,7 @@ class AdminProducts extends Admin {
 
         $data['categories'] = \CI::Categories()->get_categories_tiered();
         $data['page_title'] = lang('giftcard_product_form');
+        $data['groups'] = \CI::Customers()->get_groups();
 
         //default values are empty if the product is new
         $data['id'] = '';
@@ -462,16 +463,19 @@ class AdminProducts extends Admin {
         $data['slug'] = '';
         $data['description'] = '';
         $data['excerpt'] = '';
-        $data['price'] = '0.00';
         $data['track_stock'] = '';
         $data['seo_title'] = '';
         $data['meta'] = '';
-        $data['enabled'] = '';
         $data['is_giftcard'] = 1;
         $data['taxable'] = '';
         $data['images'] = [];
         $data['product_categories'] = [];
         $data['product_files'] = [];
+
+        foreach($data['groups'] as $group)
+        {
+            $data['enabled_'.$group->id] = '';
+        }
 
         //create the photos array for later use
         $data['photos'] = [];
@@ -503,12 +507,14 @@ class AdminProducts extends Admin {
             $data['slug']               = $product->slug;
             $data['description']        = $product->description;
             $data['excerpt']            = $product->excerpt;
-            $data['price']              = $product->price;
             $data['quantity']           = $product->quantity;
             $data['taxable']            = $product->taxable;
             $data['fixed_quantity']     = $product->fixed_quantity;
-            $data['enabled']            = $product->enabled;
             $data['is_giftcard']        = $product->is_giftcard;
+            foreach($data['groups'] as $group)
+            {
+                $data['enabled_'.$group->id] = $product->{'enabled_'.$group->id};
+            }
 
             //make sure we haven't submitted the form yet before we pull in the images/related products from the database
             if(!\CI::input()->post('submit'))
@@ -544,9 +550,12 @@ class AdminProducts extends Admin {
         \CI::form_validation()->set_rules('excerpt', 'lang:excerpt', 'trim');
         \CI::form_validation()->set_rules('taxable', 'lang:taxable', 'trim|numeric');
         \CI::form_validation()->set_rules('fixed_quantity', 'lang:fixed_quantity', 'trim|numeric');
-        \CI::form_validation()->set_rules('enabled', 'lang:enabled', 'trim|numeric');
+        
         \CI::form_validation()->set_rules('option[giftcard_values]', 'lang:giftcard_values', 'required');
-
+        foreach($data['groups'] as $group)
+        {
+            \CI::form_validation()->set_rules('enabled_'.$group->id, lang('enabled').'('.$group->name.')', 'trim|numeric');
+        }
         /*
         if we've posted already, get the photo stuff and organize it
         if validation comes back negative, we feed this info back into the system
@@ -598,10 +607,16 @@ class AdminProducts extends Admin {
             $save['meta'] = \CI::input()->post('meta');
             $save['description'] = \CI::input()->post('description');
             $save['excerpt'] = \CI::input()->post('excerpt');
-            $save['price'] = '0.00';
+            
+            foreach($data['groups'] as $group)
+            {
+                $save['enabled_'.$group->id] = \CI::input()->post('enabled_'.$group->id);
+                $save['price_'.$group->id] = '0.00';
+                $save['saleprice_'.$group->id] = '0.00';
+            }
+
             $save['is_giftcard'] = 1;
             $save['taxable'] = \CI::input()->post('taxable');
-            $save['enabled'] = \CI::input()->post('enabled');
             $save['taxable'] = \CI::input()->post('taxable');
             $post_images = \CI::input()->post('images');
 
