@@ -1,4 +1,4 @@
-<button class="addressForm blue pull-right" data-address-id><?php echo lang('add_address');?></button>
+<button class="addressForm blue pull-right" data-address-id="0"><?php echo lang('add_address');?></button>
 
 <script>
     $('.addressForm').click(function(){
