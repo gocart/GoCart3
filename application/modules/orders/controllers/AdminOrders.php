@@ -85,8 +85,8 @@ class AdminOrders extends Admin {
         $config['last_tag_open'] = '<li>';
         $config['last_tag_close'] = '</li>';
 
-        $config['full_tag_open'] = '<div class="pagination"><ul>';
-        $config['full_tag_close'] = '</ul></div>';
+        $config['full_tag_open'] = '<nav><ul class="pagination">';
+        $config['full_tag_close'] = '</ul></nav>';
         $config['cur_tag_open'] = '<li class="active"><a href="#">';
         $config['cur_tag_close'] = '</a></li>';
 
