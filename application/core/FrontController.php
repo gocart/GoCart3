@@ -47,7 +47,7 @@ class Front extends \GoCart\Controller {
 
         if($string)
         {
-            return $this->views->show($view, $vars);
+            return $this->views->get($view, $vars);
         }
         else
         {
