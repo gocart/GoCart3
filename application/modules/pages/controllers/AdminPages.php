@@ -206,7 +206,7 @@ class AdminPages extends Admin
     function delete($id)
     {
         
-        $page   = \CI::Pages()->get_page($id);
+        $page   = \CI::Pages()->find($id);
         
         if($page)
         {
