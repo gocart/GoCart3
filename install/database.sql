@@ -4536,8 +4536,8 @@ CREATE TABLE `gc_search` (
 
 CREATE TABLE `gc_settings` (
   `id` int(9) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) NOT NULL,
-  `setting_key` varchar(255) NOT NULL,
-  `setting` longtext NOT NULL,
+  `code` varchar(255),
+  `setting_key` varchar(255),
+  `setting` longtext,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
