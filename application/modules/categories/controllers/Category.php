@@ -44,4 +44,16 @@ class Category extends Front {
         $this->view('categories/category', $categories);
     }
 
+    public function shortcode($slug = false, $perPage = false)
+    {
+        if(!$perPage)
+        {
+            $perPage = config_item('products_per_page');
+        }
+
+        $products = \CI::Categories()->get($slug, 'id', 'ASC', 0, $perPage);
+
+        return $this->partial('categories/products', $products);
+    }
+
 }

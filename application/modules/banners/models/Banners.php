@@ -12,17 +12,17 @@
 Class Banners extends CI_Model
 {
 
-    function banner_collections()
+    public function banner_collections()
     {
         return CI::db()->order_by('name', 'ASC')->get('banner_collections')->result();
     }
     
-    function banner_collection($banner_collection_id)
+    public function banner_collection($banner_collection_id)
     {
         return CI::db()->where('banner_collection_id', $banner_collection_id)->get('banner_collections')->row();
     }
     
-    function banner_collection_banners($banner_collection_id, $only_active=false, $limit=5)
+    public function banner_collection_banners($banner_collection_id, $only_active=false, $limit=5)
     {
         CI::db()->where('banner_collection_id', $banner_collection_id);
         $banners    = CI::db()->order_by('sequence', 'ASC')->get('banners')->result();
@@ -77,7 +77,7 @@ Class Banners extends CI_Model
         }
     }
     
-    function banner($banner_id)
+    public function banner($banner_id)
     {
         CI::db()->where('banner_id', $banner_id);
         $result = CI::db()->get('banners');
@@ -103,7 +103,7 @@ Class Banners extends CI_Model
         }
     }
     
-    function save_banner($data)
+    public function save_banner($data)
     {
         if(isset($data['banner_id']))
         {
@@ -117,7 +117,7 @@ Class Banners extends CI_Model
         }
     }
     
-    function save_banner_collection($data)
+    public function save_banner_collection($data)
     {
         if(isset($data['banner_collection_id']) && (bool)$data['banner_collection_id'])
         {
@@ -130,7 +130,7 @@ Class Banners extends CI_Model
         }
     }
     
-    function get_homepage_banners($limit = false)
+    public function get_homepage_banners($limit = false)
     {
         $banners    = CI::db()->order_by('sequence ASC')->get('banners')->result();
         $count  = 1;
@@ -182,13 +182,13 @@ Class Banners extends CI_Model
         return $banners;
     }
     
-    function delete_banner($banner_id)
+    public function delete_banner($banner_id)
     {
         CI::db()->where('banner_id', $banner_id);
         CI::db()->delete('banners');
     }
     
-    function delete_banner_collection($banner_collection_id)
+    public function delete_banner_collection($banner_collection_id)
     {
         CI::db()->where('banner_collection_id', $banner_collection_id);
         CI::db()->delete('banners');
@@ -197,7 +197,7 @@ Class Banners extends CI_Model
         CI::db()->delete('banner_collections');
     }
     
-    function getNextSequence($banner_collection_id)
+    public function getNextSequence($banner_collection_id)
     {
         CI::db()->where('banner_collection_id', $banner_collection_id);
         CI::db()->select('sequence');
@@ -215,7 +215,7 @@ Class Banners extends CI_Model
         }
     }
 
-    function organize($banners)
+    public function organize($banners)
     {
         foreach ($banners as $sequence => $id)
         {
@@ -225,11 +225,12 @@ Class Banners extends CI_Model
         }
     }
 
-    function show_collection($banner_collection_id, $quantity=5, $theme='default')
+    public function show_collection($banner_collection_id, $quantity=5, $theme='default')
     {
         $data['id'] = $banner_collection_id;
         $data['banners'] = $this->banner_collection_banners($banner_collection_id, true, $quantity);
         
-        return \GoCart\Libraries\View::getInstance()->get('banners/'.$theme, $data);
+
+        echo \GoCart\Libraries\View::getInstance()->get('banners/'.$theme, $data);
     }
 }

@@ -4,12 +4,7 @@ use GoCart\Libraries\View as View;
 
 Class content_filter
 {
-    public $content_filters = [
-                                'banners'=>'banner_filter',
-                                'category'=>'category_filter',
-                                'div'=>'div_filter',
-                                '/div'=>'div_close_filter'
-                            ];
+
     public $content = '';
     
     function __construct($content)
@@ -17,115 +12,46 @@ Class content_filter
         //set the content appropriately
         $this->content = $content;
 
-        preg_match_all('/{(.*?)}/s', $content, $matches);
+        $loader = new \Twig_Loader_String();
+        $twig = new \Twig_Environment($loader);
 
-        $caught = false;
-        foreach ($matches[1] as $a )
+        //baseURL & siteURL filter
+        $filter = new \Twig_SimpleFilter('*URL', function($name, $string){
+            $f = $name.'_url';
+            return $f($string);
+        });
+        $twig->addFilter($filter);
+
+        //themeImg filter
+        $filter = new \Twig_SimpleFilter('themeImg', function($string){
+            return theme_img($string);
+        });
+        $twig->addFilter($filter);
+
+        foreach($GLOBALS['themeShortcodes'] as $shortcode)
         {
-            //trim all the values
-            $vars = array_map('trim', explode('|', $a));
-
-            //look for an array key
-            if(array_key_exists($vars[0], $this->content_filters))
-            {
-                $caught = true; //we found an actual filter
-                //get the key
-                $key = array_shift($vars);
-
-                //define the method
-                $method = $this->content_filters[$key];
+            $function = new \Twig_SimpleFunction($shortcode['shortcode'], function() use ($shortcode) {
                 
-                //run the method with the remaining vars
-                $return = $this->$method($vars);
-
-                if($return)
+                if(is_array($shortcode['method']))
                 {
-                    $this->content = str_replace('{'.$a.'}', $return, $this->content);
+                    $class = new $shortcode['method'][0];
+                    return call_user_func_array([$class, $shortcode['method'][1]], func_get_args());
                 }
-            }
+                else
+                {
+                    return call_user_func_array($shortcode['method'], func_get_args());
+                }
+                
+            });
+            $twig->addFunction($function);
         }
+
+        //render the subject and content to a variable
+        $this->content = $twig->render($this->content);
     }
 
     function display()
     {
        return $this->content;
-    }
-
-    function banner_filter($vars)
-    {
-        $banners = new Banners;
-
-        //set defaults
-        $collection = false;
-        $quantity = 5;
-        $template = 'default';
-        
-        if(isset($vars[0]))
-        {
-            //collection ID
-            $collection = $vars[0];
-        }
-        else
-        {
-            return false; // there is nothing to display
-        }
-
-        //set quantity
-        if(isset($vars[1]))
-        {
-            $quantity = $vars[1];
-        }
-
-        //set tempalte
-        if(isset($vars[2]))
-        {
-            $template = $vars[2];
-        }
-
-        return $banners->show_collection($collection, $quantity, $template);
-    }
-
-    function category_filter($vars)
-    {
-        //set defaults
-        $slug = false;
-        $per_page = config_item('products_per_page');
-
-        if(isset($vars[0]))
-        {
-            $slug = $vars[0];
-        }
-        else
-        {
-            return false; // there is nothing to display
-        }
-
-        if(isset($vars[1]))
-        {
-            $per_page = $vars[1];
-        }
-
-        $categories = \CI::Categories()->get($slug, 'id', 'ASC', 0, $per_page);
-
-        return View::getInstance()->get('categories/products', $categories);
-    }
-
-    function div_filter($vars)
-    {
-        $container = '<div';
-
-        foreach($vars as $var)
-        {
-            $container .= ' '.$var;
-        }
-        
-        $container .='>';
-
-        return $container;
-    }
-
-    function div_close_filter($vars)
-    {
-        return '</div>';
     }
 }

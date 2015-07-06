@@ -46,6 +46,7 @@ class Bootstrap extends CI_Controller {
 
 			$paymentModules = [];
 			$shippingModules = [];
+			$themeShortcodes = [];
 			$routes = [];
 			$modules = [];
 
@@ -93,7 +94,8 @@ class Bootstrap extends CI_Controller {
 
 			$manifest .= '//ClassMap for autoloader'."\n".'$classes = '.var_export($this->classMap, true).';';
 			$manifest .= "\n\n".'//Available Payment Modules'."\n".'$GLOBALS[\'paymentModules\'] ='.var_export($paymentModules, true).';';
-			$manifest .= "\n\n".'//Available SHipping Modules'."\n".'$GLOBALS[\'shippingModules\'] = '.var_export($shippingModules, true).';';
+			$manifest .= "\n\n".'//Available Shipping Modules'."\n".'$GLOBALS[\'shippingModules\'] = '.var_export($shippingModules, true).';';
+			$manifest .= "\n\n".'//Theme Shortcodes'."\n".'$GLOBALS[\'themeShortcodes\'] = '.var_export($themeShortcodes, true).';';
 			$manifest .= "\n\n".'//Complete Module List'."\n".'$GLOBALS[\'modules\'] = '.var_export($modules,true).';';
 			$manifest .= "\n\n".'//Defined Routes'."\n".'$routes = '.var_export($routes,true).';';
 			
@@ -199,6 +201,7 @@ class Bootstrap extends CI_Controller {
 				call_user_func_array([$class, $target[1]], $match['params']);
 
 			} catch(Exception $e) {
+				var_dump($e);
 				throw_404();
 			}
 		}

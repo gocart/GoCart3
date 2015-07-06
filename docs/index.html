@@ -291,11 +291,8 @@
         </li>
         <li><a href="#dg_modules">What Are Modules</a></li>
         <li><a href="#dg_manifest">The Manifest File</a></li>
-        <li><a href="#dg_themes">Themes</a>
-            <ul>
-                <li><a href="#dg_theme_shortcodes">Shortcodes</a></li>
-            </ul>
-        </li>
+        <li><a href="#dg_themes">Themes</a></li>
+        <li><a href="#dg_shortcodes">Shortcodes</a></li>
         <li><a href="#dg_altorouter">AltoRouter</a></li>
     </ul>
 </nav>
@@ -722,8 +719,13 @@
 
             <p>
                 <h5>Using the Category Short Code</h5>
-                Categories can be displayed on a <a href="#ug_pages">page</a> using a shortcode. The shortcode formatting for a category looks something like this
-                <strong>{category|slug|quantity}</strong>. In this case you would replace slug with the slug of the category you are wanting to display.
+                Categories can be displayed on a <a href="#ug_pages">page</a> using a shortcode. The shortcode formatting for a category looks something like this:
+            </p>
+            <p>
+                <code>{{ category('slug', quantity) }}</code>
+            </p>
+            <p>
+                In this case you would replace slug with the slug of the category you are wanting to display.
                 Quantity should be replaced with the number of products you want to display. This is really useful for listing a small selection of products on a page outside
                 the flow of the normal system.
             </p>
@@ -970,7 +972,7 @@
             <p>
                 <a name="ug_banners_shortcode"></a>
                 <h5>Using the Banner Short Code</h5>
-                The Banner shortcode looks something like this <strong>{banners|collection_id|quantity|template}</strong>. In this case you would replace collection_id with the numerical ID of the banner collection you are
+                The Banner shortcode looks something like this <strong>{{ banner('collection_id', 'quantity', 'template') }}</strong>. In this case you would replace collection_id with the numerical ID of the banner collection you are
                 wanting to reference. Quantity should be replaced with the number of banners you want to display and template should be replaced with the name of the view file used to render the banners.
             </p>
         </section>
@@ -1252,18 +1254,29 @@
                 to override module level views. To override a module view simply create a view in your theme with the same filename as the view you want to override. The new GoCart 3 <a class="tag" href="#dg_codeigniter_views">view class</a>
                 will automatically pick the view file from your theme instead of the one located in the module.
             </p>
+        </section>
+        <section>
+            <a name="dg_shortcodes"></a>
             
-            <a name="dg_theme_shortcodes"></a>
+            <h3 class="title">Shortcodes</h3>
+            
             <p>
-                <h5>Shortcodes</h5>
-                GoCart 3 is laying the foundation for shortcode support in themes. The default theme supports shortcodes for categories and banners. To create additional short codes, open the following file. <br>
+                GoCart 3 is laying the foundation for front end shortcode support. By default, GoCart comes with shortcodes for categories and banners. Creating additional shortcodes requires adding a new line to your module's <a class="tag" href="#dg_manifest">manifest</a> file.
             </p>
             <p>
-                <strong>themes/default/helpers/content_filter.php</strong>
+                The line below is a sample manifest entry for a new shortcode. This example is taken from the Category module.
+                </p>
+            <p>
+                <code>$themeShortcodes[] = ['shortcode'=>'category', 'method'=>['GoCart\Controller\Category', 'shortcode']];</code>
             </p>
             <p>
-                From here you can see how shortcodes are found and replaced throughout page content. To create a new shortcode simply add the shortcode keyword to the $content_filters array as a key with the value being
-                the name of the function that will process the shortcode. Your function should return the contents that will be used as a replacement for the shortcode in your page content.
+                A shortcode manifest entry requires a key called "shortcode" and a key called "method". Creating a shortcode will result in a
+                Twig_SimpleFunction being available for use in your content. The shortcode key will be the function name. The Method key can either
+                be an array with the first value being a classname and the second value being a method name within that class, or a string that directs
+                to a global function.
+            </p>
+            <p>
+                Remember to delete the master manifest file in the application/config directory so it can regenerate before trying out your new shortcode.
             </p>
         </section>
 
