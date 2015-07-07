@@ -97,7 +97,7 @@ Class Login extends CI_Model
         }
     }
 
-    public function isLoggedIn($redirect = false, $default_redirect = 'secure/login/')
+    public function isLoggedIn($redirect = false, $default_redirect = 'login')
     {
         //$redirect allows us to choose where a customer will get redirected to after they login
         //$default_redirect points is to the login page, if you do not want this, you can set it to false and then redirect wherever you wish.

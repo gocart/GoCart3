@@ -4,7 +4,7 @@
         <h1><?php echo lang('form_register');?></h1>
     </div>
     
-    <?php echo form_open('register'); ?>
+    <?php echo form_open('register', 'id="registration_form"'); ?>
         <input type="hidden" name="submitted" value="submitted" />
         <input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
 
@@ -67,7 +67,7 @@
     
     for (var key in formErrors) {
         if (formErrors.hasOwnProperty(key)) {
-            $('[name="'+key+'"]').parent().append('<div class="form-error text-red">'+formErrors[key]+'</div>')
+            $('#registration_form [name="'+key+'"]').parent().append('<div class="form-error text-red">'+formErrors[key]+'</div>')
         }
     }
 <?php endif;?>
