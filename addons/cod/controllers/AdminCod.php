@@ -26,14 +26,14 @@ class AdminCod extends Admin {
         \CI::Settings()->save_settings('payment_modules', array('cod'=>'1'));
         \CI::Settings()->save_settings('cod', array('enabled'=>'1'));
 
-        redirect('admin\payments');
+        redirect('admin/payments');
     }
 
     public function uninstall()
     {
         \CI::Settings()->delete_setting('payment_modules', 'cod');
         \CI::Settings()->delete_settings('cod');
-        redirect('admin\payments');
+        redirect('admin/payments');
     }
 
     //admin end form and check functions
@@ -55,7 +55,7 @@ class AdminCod extends Admin {
         else
         {
             \CI::Settings()->save_settings('cod', array('enabled'=>$_POST['enabled']));
-            redirect('admin\payments');
+            redirect('admin/payments');
         }
     }
 }
