@@ -15,7 +15,7 @@ class Installer extends CI_Controller {
 		$testIntl = class_exists('Locale');
 
 		$errors = (!$testConfig)?'<div class="alert alert-danger" role="alert">The folder "'.$cartPath.'/application/config" must be writable.</div>':'';
-		$errors .= (!$testUploads)?'<div class="alert alert-danger" role="alert">The folder "'.$cartPath.'/application/uploads" must be writable.</div>':'';
+		$errors .= (!$testUploads)?'<div class="alert alert-danger" role="alert">The folder "'.$cartPath.'/uploads" must be writable.</div>':'';
 		$errors .= (!$testIntl)?'<div class="alert alert-danger" role="alert">The PHP_INTL Library is required for GoCart and is not installed on your server. <a href="http://php.net/manual/en/book.intl.php">Read More</a></div>':'';
 
 		$this->form_validation->set_rules('hostname', 'Hostname', 'required');
