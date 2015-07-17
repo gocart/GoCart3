@@ -4445,8 +4445,18 @@ CREATE TABLE `gc_order_item_options` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+CREATE TABLE `gc_transactions` (
+  `id` int(11) NOT NULL,
+  `order_number` varchar(60) NOT NULL,
+  `response` text NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
 CREATE TABLE `gc_orders` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `transaction_id` int(11) NULL,
   `order_number` varchar(60) DEFAULT NULL,
   `customer_id` int(9) unsigned DEFAULT NULL,
   `billing_address_id` int(11) NOT NULL,
