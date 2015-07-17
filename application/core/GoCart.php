@@ -738,7 +738,7 @@ class GoCart {
         }
     }
 
-    function submitOrder()
+    function submitOrder($transaction = false)
     {
         foreach ($this->items as $item)
         {
@@ -791,8 +791,14 @@ class GoCart {
                 }
             }
         }
+        if(!$transaction)
+        {
+            $transaction = $this->transaction();
+        }
 
-        $this->cart->order_number = str_replace('.', '-', microtime(true)).$this->cart->id;
+        //add transaction info to the order
+        $this->cart->order_number = $transaction->order_number;
+        $this->cart->transaction_id = $transaction->id;
         $this->cart->status = config_item('order_status');
         $this->cart->ordered_on = date('Y-m-d H:i:s');
 
@@ -812,7 +818,31 @@ class GoCart {
         //return the order number
         return $orderNumber;
     }
+    
+    public function transaction($transaction = false)
+    {
+        //no transaction provided? create a new one and return it.
+        if(!$transaction)
+        {
+            $order_number = str_replace('.', '-', microtime(true)).$this->cart->id;
+            $transaction = [
+                'order_id' => $this->cart->id,
+                'order_number' => $order_number,
+                'created_at'=>date('Y-m-d H:i:s')
+            ];
 
+            \CI::db()->insert('transactions', $transaction);
+            $transaction['id'] = \CI::db()->insert_id();
+
+            return (object)$transaction;    
+        }
+        else
+        {
+            //we have a transaction, update it with the response
+            \CI::db()->where('id',$transaction->id)->update('transactions', (array)$transaction);
+        }
+    }
+    
     public function getTaxableTotal()
     {
         $total = 0;
