@@ -132,8 +132,8 @@ Class Orders extends CI_Model
 
         //\CI::db()->select($select)->join('customers_address_bank as shipping', 'shipping.id = orders.shipping_address_id', 'left')->join('customers_address_bank as billing', 'billing.id = orders.billing_address_id', 'left');
 
-        \CI::db()->select($select)->join('(select * from '.\CI::db()->dbprefix('customers_address_bank').') as shipping', 'shipping.id = orders.shipping_address_id', 'left');
-        \CI::db()->join('(select * from '.\CI::db()->dbprefix('customers_address_bank').') as billing', 'billing.id = orders.billing_address_id', 'left');
+        \CI::db()->select($select)->join('customers_address_bank as shipping', 'shipping.id = orders.shipping_address_id', 'left');
+        \CI::db()->join('customers_address_bank as billing', 'billing.id = orders.billing_address_id', 'left');
 
         if ($search)
         {
@@ -173,8 +173,8 @@ Class Orders extends CI_Model
     public function getOrderCount($search=false)
     {
 
-        \CI::db()->join('(select * from '.\CI::db()->dbprefix('customers_address_bank').') as shipping', 'shipping.id = orders.shipping_address_id', 'left');
-        \CI::db()->join('(select * from '.\CI::db()->dbprefix('customers_address_bank').') as billing', 'billing.id = orders.billing_address_id', 'left');
+        \CI::db()->join('customers_address_bank as shipping', 'shipping.id = orders.shipping_address_id', 'left');
+        \CI::db()->join('customers_address_bank as billing', 'billing.id = orders.billing_address_id', 'left');
 
         if ($search)
         {
