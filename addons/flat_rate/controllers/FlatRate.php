@@ -22,7 +22,7 @@ class FlatRate extends Front {
     {
         $settings = \CI::Settings()->get_settings('FlatRate');
         
-        if($settings['enabled'] && $settings['enabled'] > 0)
+        if(isset($settings['enabled']) && $settings['enabled'] && $settings['enabled'] > 0)
         {
             return ['Flat Rate'=> $settings['rate']];
         }
