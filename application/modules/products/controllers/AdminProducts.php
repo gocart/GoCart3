@@ -199,7 +199,7 @@ class AdminProducts extends Admin {
             }
 
             // get product & options data
-            $data['ProductOptions'] = \CI::ProductOptions()->getProductOptions($id);
+            $data['productOptions'] = \CI::ProductOptions()->getProductOptions($id);
             $product = \CI::Products()->find($id, true);
 
             //if the product does not exist, redirect them to the product list with an error
