@@ -488,7 +488,6 @@ class GoCart {
             $optionError = false;
             $optionErrorMessage = lang('option_error').'<br/>';
 
-            //lets validate the options
             foreach($productOptions as $productOption)
             {
                 // are we missing any required values?
@@ -498,11 +497,17 @@ class GoCart {
                     $optionValue = $postedOptions[$productOption->id];
                 }
 
-                if((int)$productOption->required && !$optionValue)
+                if((int)$productOption->required && empty($optionValue))
                 {
                     $optionError = true;
                     $optionErrorMessage .= "- ". $productOption->name .'<br/>';
                     continue; // don't bother processing this particular option any further
+                }
+
+                if(empty($optionValue))
+                {
+                    //empty? Move along, nothing to see here.
+                    continue;
                 }
 
                 //create options to save to the database in case we get past the errors
@@ -534,8 +539,8 @@ class GoCart {
                     $saveOption = [];
                     if($productOption->type == 'textfield' || $productOption->type == 'textarea')
                     {
-                        $saveOption['value'] = $optionValue;
                         $productOptionValue = $productOption->values[0];
+                        $productOptionValue->value = $optionValue;
                     }
                     else //radios and checkboxes
                     {
@@ -554,6 +559,7 @@ class GoCart {
                         $saveOption['option_name'] = $productOption->name;
                         $saveOption['price'] = $productOptionValue->price;
                         $saveOption['weight'] = $productOptionValue->weight;
+                        $saveOption['value'] = $productOptionValue->value;
 
                         //add it to the array;
                         $saveOptions[] = $saveOption;
