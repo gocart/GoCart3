@@ -21,7 +21,7 @@ class Search extends Front {
         $per_page = config_item('products_per_page');
 
         \CI::load()->model('Search');
-        
+
         //check to see if we have a search term
         if(!$code)
         {
@@ -51,7 +51,7 @@ class Search extends Front {
 
         //fix for the category view page.
         $data['base_url'] = [];
-        
+
         $sortArray = array(
                             'name/asc' => array('by' => 'name', 'sort'=>'ASC'),
                             'name/desc' => array('by' => 'name', 'sort'=>'DESC'),
@@ -62,9 +62,9 @@ class Search extends Front {
     
         if(isset($_GET['by']))
         {
-            if(isset($sort_array[$_GET['by']]))
+            if(isset($sortArray[$_GET['by']]))
             {
-                $sortBy = $sort_array[$_GET['by']];
+                $sortBy = $sortArray[$_GET['by']];
             }
         }
 
@@ -77,7 +77,7 @@ class Search extends Front {
         else
         {
 
-            
+
             $result = \CI::Products()->search_products($term, $per_page, $page, $sortBy['by'], $sortBy['sort']);
 
             $config['total_rows'] = $result['count'];
