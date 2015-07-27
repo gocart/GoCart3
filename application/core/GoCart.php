@@ -647,7 +647,7 @@ class GoCart {
                         }
                         else
                         {
-                            $errors[$item->id] = str_replace('{quantity}', lang('not_enough_stock_quantity'));
+                            $errors[$item->id] = str_replace('{quantity}', $stock->quantity, lang('not_enough_stock_quantity'));
                         }
                     }
                 }
