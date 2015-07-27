@@ -4446,7 +4446,7 @@ CREATE TABLE `gc_order_item_options` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `gc_transactions` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `order_number` varchar(60) NOT NULL,
   `response` text NOT NULL,
   `order_id` int(11) NOT NULL,
