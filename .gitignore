@@ -8,6 +8,9 @@ application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
 
+application/config/database.php
+application/config/manifest.php
+
 # OS generated files #
 ######################
 .DS_Store
