@@ -5,7 +5,8 @@
         "php": ">=5.4",
         "altorouter/altorouter": "1.1.0",
         "swiftmailer/swiftmailer": "@stable",
-        "twig/twig": "~1.0"
+        "twig/twig": "~1.0",
+        "omnipay/common": "^2.3"
     },
     "require-dev": {
         "mikey179/vfsStream": "1.1.*"
