@@ -237,11 +237,6 @@
 
 <script>
 
-            /*<div class="cartItem errorAlert">
-                <div class="summaryStockAlert">
-                    <?php echo $inventoryCheck[$product->id];?>
-                </div>
-            */
 var inventoryCheck = <?php echo json_encode($inventoryCheck);?>
 
 function setInventoryErrors(checks)
