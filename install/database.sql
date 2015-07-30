@@ -4419,9 +4419,6 @@ CREATE TABLE `gc_order_items` (
   `enabled_1` tinyint(1) DEFAULT '0',
   `price_1` decimal(10,2) DEFAULT '0.00',
   `saleprice_1` decimal(10,2) DEFAULT '0.00',
-  `enabled_2` tinyint(1) DEFAULT '0',
-  `price_2` decimal(10,2) DEFAULT '0.00',
-  `saleprice_2` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -4526,9 +4523,6 @@ CREATE TABLE `gc_products` (
   `enabled_1` tinyint(1) DEFAULT '0',
   `price_1` decimal(10,2) DEFAULT '0.00',
   `saleprice_1` decimal(10,2) DEFAULT '0.00',
-  `enabled_2` tinyint(1) DEFAULT '0',
-  `price_2` decimal(10,2) DEFAULT '0.00',
-  `saleprice_2` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
