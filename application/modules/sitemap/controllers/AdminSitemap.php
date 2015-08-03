@@ -29,7 +29,6 @@ class AdminSitemap extends Admin {
 
     public function newSitemap()
     {
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/sitemap.xml'; 
         $file = fopen('sitemap.xml', 'w');
         $xml = $this->partial('sitemap_xml_head', [], true);
         echo $xml;
@@ -46,7 +45,6 @@ class AdminSitemap extends Admin {
 
         $xml = $this->partial('product_xml', ['products'=>$products], true);
         echo $xml;
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/sitemap.xml'; 
         $file = fopen('sitemap.xml', 'a');
         fwrite($file, $xml);
         fclose($file);
@@ -58,7 +56,6 @@ class AdminSitemap extends Admin {
         
         $xml = $this->partial('category_xml', ['categories'=>$categories['all']], true);
         echo $xml;
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/sitemap.xml'; 
         $file = fopen('sitemap.xml', 'a');
         fwrite($file, $xml);
         fclose($file);
@@ -70,7 +67,6 @@ class AdminSitemap extends Admin {
         
         $xml = $this->partial('page_xml', ['pages'=>$pages['all']], true);
         echo $xml;
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/sitemap.xml'; 
         $file = fopen('sitemap.xml', 'a');
         fwrite($file, $xml);
         fclose($file);
@@ -82,7 +78,6 @@ class AdminSitemap extends Admin {
 
         echo $xml;
 
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/sitemap.xml'; 
         $file = fopen('sitemap.xml', 'a');
         fwrite($file, $xml);
         fclose($file);
