@@ -29,13 +29,6 @@ class View
         }
     }
 
-    private function __clone()
-    {
-    }
-    private function __wakeup()
-    {
-    }
-
     public static function getInstance()
     {
         static $instance = null;
