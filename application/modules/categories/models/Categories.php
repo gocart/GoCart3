@@ -23,9 +23,9 @@ Class Categories
 
     public function tier($parent_id)
     {
-        if(isset($this->categories[$parent_id]))
+        if(isset($this->tiered[$parent_id]))
         {
-            return $this->categories[$parent_id];
+            return $this->tiered[$parent_id];
         }
         else
         {
