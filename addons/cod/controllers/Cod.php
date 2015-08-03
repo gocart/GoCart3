@@ -21,7 +21,6 @@ class Cod extends Front {
     public function checkoutForm()
     {
         //set a default blank setting for flatrate shipping
-        $settings = \CI::Settings()->get_settings('cod');
         $this->partial('codCheckoutForm');    
     }
 
