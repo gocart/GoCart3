@@ -194,7 +194,7 @@ function remove_option(id)
                                             foreach($po->values as $value)
                                             {
                                                 $value = (object)$value;
-                                                add_option_value($po, $counter++, $value->price);
+                                                add_option_value($counter++, $value->price);
                                                 $GLOBALS['option_value_count']++;
                                             }
                                         endif;
@@ -331,7 +331,7 @@ function photos_sortable()
 }
 
 <?php
-function add_option_value($po, $count, $price)
+function add_option_value($count, $price)
 {
     ob_start();
     ?>
@@ -359,7 +359,7 @@ var option_count = <?php echo $counter?>;
 function add_giftcard_values()
 {
     option_count ++;
-    $('#values_container tbody').append('<?php add_option_value('', "'+option_count+'", '');?>')
+    $('#values_container tbody').append('<?php add_option_value("'+option_count+'", '');?>')
 }
 
 function remove_giftcard_value(id)

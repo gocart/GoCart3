@@ -31,7 +31,7 @@ Class Customers extends CI_Model
         return $result->result();
     }
 
-    public function get_customer_export($limit=0, $offset=0, $order_by='id', $direction='DESC')
+    public function get_customer_export()
     {
         return CI::db()->where('is_guest', 0)->get('customers')->result();
     }

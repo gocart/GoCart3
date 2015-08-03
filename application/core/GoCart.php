@@ -125,9 +125,7 @@ class GoCart {
     private function calculateCouponDiscounts()
     {
         $coupons = [];
-        $products = [];
         $discounts = [];
-        $discounts2 = [];
         for($i=0; $i<count($this->items); $i++)
         {
             if($this->items[$i]->type == 'coupon')

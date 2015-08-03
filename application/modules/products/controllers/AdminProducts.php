@@ -11,8 +11,6 @@
 
 class AdminProducts extends Admin {
 
-    private $use_inventory = false;
-
     public function __construct()
     {
         parent::__construct();
@@ -31,7 +29,6 @@ class AdminProducts extends Admin {
 
         $data['code'] = $code;
         $term = false;
-        $category_id = false;
 
         //get the category list for the drop menu
         $data['categories'] = \CI::Categories()->getCategoryOptionsMenu();
@@ -742,8 +739,7 @@ class AdminProducts extends Admin {
 
 
             // save product
-            $product_id = \CI::Products()->save($save, $options, $categories);
-
+            \CI::Products()->save($save, $options, $categories);
 
             \CI::session()->set_flashdata('message', lang('message_saved_giftcard_product'));
 

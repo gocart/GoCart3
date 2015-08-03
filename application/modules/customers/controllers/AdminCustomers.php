@@ -216,7 +216,7 @@ class AdminCustomers extends Admin {
             else
             {
                 //if the customer is legit, delete them
-                $delete = \CI::Customers()->delete($id);
+                \CI::Customers()->delete($id);
                 
                 \CI::session()->set_flashdata('message', lang('message_customer_deleted'));
                 redirect('admin/customers');
@@ -415,7 +415,8 @@ class AdminCustomers extends Admin {
             else
             {
                 //if the customer is legit, delete them
-                $delete = \CI::Customers()->delete_address($id, $customer_id); 
+                \CI::Customers()->delete_address($id, $customer_id);
+
                 \CI::session()->set_flashdata('message', lang('message_address_deleted'));
                 
                 if($customer_id)

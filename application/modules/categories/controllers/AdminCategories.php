@@ -244,7 +244,7 @@ class AdminCategories extends Admin {
                 $save['enabled_'.$group->id] = \CI::input()->post('enabled_'.$group->id);
             }
             
-            $category_id = \CI::Categories()->save($save);
+            \CI::Categories()->save($save);
             
             \CI::session()->set_flashdata('message', lang('message_category_saved'));
             

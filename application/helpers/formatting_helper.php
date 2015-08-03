@@ -29,7 +29,7 @@ function format_address($fields)
     return $formatted;
 }
 
-function format_currency($value, $symbol=true)
+function format_currency($value)
 {
     $fmt = numfmt_create( config_item('locale'), NumberFormatter::CURRENCY );
     return numfmt_format_currency($fmt, round($value,2), config_item('currency_iso'));
