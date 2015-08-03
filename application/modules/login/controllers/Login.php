@@ -62,8 +62,6 @@ class Login extends Front {
     {
         $data['page_title'] = lang('forgot_password');
 
-        $submitted = \CI::input()->post('submitted');
-
         \CI::form_validation()->set_rules('email', 'lang:address_email', ['trim', 'required', 'valid_email',
             ['email_callable', function($str)
                 {
@@ -171,7 +169,7 @@ class Login extends Front {
             }
             
             // save the customer info and get their new id
-            $id = \CI::Customers()->save($save);
+            \CI::Customers()->save($save);
             
             //send the registration email
             \GoCart\Emails::registration($save);

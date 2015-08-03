@@ -19,8 +19,6 @@ class AdminPayments extends Admin {
         \CI::load()->helper('inflector');
         
         global $paymentModules;
-        //Payment Information
-        $payment_order = \CI::Settings()->get_settings('payment_order');
 
         $data['payment_modules'] = $paymentModules;
         $data['enabled_modules'] = \CI::Settings()->get_settings('payment_modules');

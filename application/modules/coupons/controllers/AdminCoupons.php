@@ -141,8 +141,7 @@ var $coupon_id;
             $products = \CI::input()->post('product');
             
             // save coupon
-            $promo_id = \CI::Coupons()->save($save);
-
+            $id = \CI::Coupons()->save($save);
 
             \CI::Coupons()->removeProduct($id);
             if(!$save['whole_order_coupon'] && $products) 

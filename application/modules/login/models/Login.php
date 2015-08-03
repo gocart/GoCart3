@@ -17,7 +17,7 @@ Class Login extends CI_Model
 
                 if(is_object($cred))
                 {
-                    $loggedIn = $this->loginCustomer($cred->email, $cred->password, true);
+                    $this->loginCustomer($cred->email, $cred->password, true);
                     if( ! $this->isLoggedIn() )
                     {
                         // cookie data isn't letting us login.
