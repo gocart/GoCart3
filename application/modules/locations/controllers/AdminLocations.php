@@ -90,7 +90,7 @@ class AdminLocations extends Admin {
             $save['status'] = \CI::input()->post('status');
             $save['tax'] = \CI::input()->post('tax');
 
-            $promo_id = \CI::Locations()->save_country($save);
+            \CI::Locations()->save_country($save);
             
             \CI::session()->set_flashdata('message', lang('message_saved_country'));
             
