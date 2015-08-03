@@ -11,7 +11,7 @@ Class Tax extends CI_Model
         
         $this->state_taxes = config_item('state_taxes');
         
-        $customer = CI::Login()->customer();
+        CI::Login()->customer();
         $order = GC::getCart();
 
         $taxType = config_item('tax_address');

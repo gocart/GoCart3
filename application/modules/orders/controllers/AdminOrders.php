@@ -139,8 +139,7 @@ class AdminOrders extends Admin {
         \CI::form_validation()->set_rules('notes', 'lang:notes');
         \CI::form_validation()->set_rules('status', 'lang:status', 'required');
 
-        $message = \CI::session()->flashdata('message');
-
+        \CI::session()->flashdata('message');
 
         if (\CI::form_validation()->run() == TRUE)
         {

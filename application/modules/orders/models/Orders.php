@@ -196,7 +196,7 @@ Class Orders extends CI_Model
     }
 
     //get an individual customers orders
-    public function getCustomerOrders($id, $offset=0)
+    public function getCustomerOrders($id)
     {
         CI::db()->order_by('ordered_on', 'DESC');
         CI::db()->where(['customer_id' => $id, 'status !=' => 'cart']);
