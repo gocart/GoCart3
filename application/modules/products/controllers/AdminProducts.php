@@ -739,7 +739,7 @@ class AdminProducts extends Admin {
 
 
             // save product
-            $product_id = \CI::Products()->save($save, $options, $categories);
+            \CI::Products()->save($save, $options, $categories);
 
 
             \CI::session()->set_flashdata('message', lang('message_saved_giftcard_product'));
