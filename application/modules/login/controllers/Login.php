@@ -158,7 +158,7 @@ class Login extends Front {
             $save['active'] = (bool)config_item('new_customer_status');
             $save['email_subscribe'] = intval((bool)\CI::input()->post('email_subscribe'));
             
-            $save['password']  = \CI::input()->post('password');
+            $save['password']  = sha1(\CI::input()->post('password'));
             
             $redirect  = \CI::input()->post('redirect');
             
@@ -184,7 +184,7 @@ class Login extends Front {
                 \CI::session()->set_flashdata('message', $twig->render( lang('registration_thanks'), $save) );
             
                 //lets automatically log them in
-                \CI::Login()->loginCustomer($save['email'], \CI::input()->post('confirm'));
+                \CI::Login()->loginCustomer($save['email'], $save['password']);
 
                 //to redirect them, if there is no redirect, the it should redirect to the homepage.
                 redirect($redirect);
