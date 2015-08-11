@@ -1,0 +1,8 @@
+{
+    "major":3,
+    "date":"2015.08.11",
+    "changelog": [
+        "Modified Version file to json and include changelog.",
+        "Fixed Customer password encryption and automatic login."
+    ]
+}
