@@ -1,8 +1,17 @@
-{
-    "major":3,
-    "date":"2015.08.11",
-    "changelog": [
-        "Modified Version file to json and include changelog.",
-        "Fixed Customer password encryption and automatic login."
-    ]
-}
+[
+    {
+        "major":3,
+        "date":"2015.08.12",
+        "changelog":[
+            "Updated HTACCESS and bootstrap.php to make installation on subfolders easier."
+        ]
+    },
+    {
+        "major":3,
+        "date":"2015.08.11",
+        "changelog":[
+            "Modified Version file to json and include changelog.",
+            "Fixed Customer password encryption and automatic login."
+        ]
+    }
+]

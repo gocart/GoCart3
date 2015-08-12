@@ -111,6 +111,12 @@ class Bootstrap extends CI_Controller {
 		//set up routing...
 		$router = new \AltoRouter();
 
+		$base = trim($_SERVER['BASE'], '/');
+		if($base != '')
+		{
+			$router->setBasePath('/'.$base);
+		}
+
 		//set the homepage route
 		$router->map('GET|POST', '/', 'GoCart\Controller\Page#homepage');
 		
