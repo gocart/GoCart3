@@ -1,6 +1,13 @@
 [
     {
         "major":3,
+        "date":"2015.08.20",
+        "changelog":[
+            "Fix category sort links on front end."
+        ]
+    },
+    {
+        "major":3,
         "date":"2015.08.12",
         "changelog":[
             "Updated HTACCESS and bootstrap.php to make installation on subfolders easier."

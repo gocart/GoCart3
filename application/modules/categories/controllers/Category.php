@@ -30,6 +30,11 @@ class Category extends Front {
             throw_404();
         }
 
+        $categories['sort'] = $sort;
+        $categories['dir'] = $dir;
+        $categories['slug'] = $slug;
+        $categories['page'] = $page;
+        
         //load up the pagination library
         \CI::load()->library('pagination');
         $config['base_url'] = $pagination_base_url;

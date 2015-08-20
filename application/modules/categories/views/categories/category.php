@@ -10,15 +10,15 @@
     <?php endif;?>
 
     <div class="productsFilter">
-        <div class="col-md-2 pull-right">
-            <select id="sort" class="form-control">
-                <option<?php echo(!empty($_GET['by']) && $_GET['by']=='name/asc')?' selected="selected"':'';?> value="?by=name/asc"><?php echo lang('sort_by_name_asc');?></option>
-                <option<?php echo(!empty($_GET['by']) && $_GET['by']=='name/desc')?' selected="selected"':'';?>  value="?by=name/desc"><?php echo lang('sort_by_name_desc');?></option>
-                <option<?php echo(!empty($_GET['by']) && $_GET['by']=='price/asc')?' selected="selected"':'';?>  value="?by=price/asc"><?php echo lang('sort_by_price_asc');?></option>
-                <option<?php echo(!empty($_GET['by']) && $_GET['by']=='price/desc')?' selected="selected"':'';?>  value="?by=price/desc"><?php echo lang('sort_by_price_desc');?></option>
+        <div class="pull-right">
+            <select id="sort">
+                <option<?php echo($sort=='name' && $dir == 'ASC')?' selected="selected"':'';?> value="<?php echo site_url('category/'.$slug.'/name/ASC/'.$page);?>"><?php echo lang('sort_by_name_asc');?></option>
+                <option<?php echo($sort=='name' && $dir == 'DESC')?' selected="selected"':'';?>  value="<?php echo site_url('category/'.$slug.'/name/DESC/'.$page);?>"><?php echo lang('sort_by_name_desc');?></option>
+                <option<?php echo($sort=='price' && $dir == 'ASC')?' selected="selected"':'';?>  value="<?php echo site_url('category/'.$slug.'/price/ASC/'.$page);?>"><?php echo lang('sort_by_price_asc');?></option>
+                <option<?php echo($sort=='price' && $dir == 'DESC')?' selected="selected"':'';?>  value="<?php echo site_url('category/'.$slug.'/price/DESC/'.$page);?>"><?php echo lang('sort_by_price_desc');?></option>
             </select>
         </div>
-        <div class="col-md-1 pull-right">
+        <div class="pull-right">
             <label class="control-label" for="input-limit"><?php echo lang('sort'); ?></label>
         </div>
     </div> 
@@ -35,7 +35,7 @@
 <script type="text/javascript">
 $(function() {
     $("#sort").change(function () {
-        window.location = '<?php echo site_url(uri_string()); ?>/'+this.value;
+        window.location = this.value;
     });
 });
 </script>
