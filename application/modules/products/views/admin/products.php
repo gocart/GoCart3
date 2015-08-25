@@ -59,11 +59,13 @@ function areyousure()
     </div>
 </div>
 
-<?php echo form_open('admin/products/bulk_save', array('id'=>'bulk_form'));?>
-<div class="btn-group pull-right form-group">
-    <button class="btn btn-primary" href="#"><i class="icon-ok"></i> <?php echo lang('bulk_save');?></button>
-    <a class="btn btn-primary" style="font-weight:normal;"href="<?php echo site_url('admin/products/form');?>"><i class="icon-plus"></i> <?php echo lang('add_new_product');?></a>
-    <a class="btn btn-primary" style="font-weight:normal;"href="<?php echo site_url('admin/products/gift-card-form');?>"><i class="icon-plus"></i> <?php echo lang('add_new_gift_card');?></a>
+<div class="row">
+    <?php echo form_open('admin/products/bulk_save', array('id'=>'bulk_form'));?>
+    <div class="btn-group pull-right form-group">
+        <button class="btn btn-primary" href="#"><i class="icon-ok"></i> <?php echo lang('bulk_save');?></button>
+        <a class="btn btn-primary" style="font-weight:normal;"href="<?php echo site_url('admin/products/form');?>"><i class="icon-plus"></i> <?php echo lang('add_new_product');?></a>
+        <a class="btn btn-primary" style="font-weight:normal;"href="<?php echo site_url('admin/products/gift-card-form');?>"><i class="icon-plus"></i> <?php echo lang('add_new_gift_card');?></a>
+    </div>
 </div>
     <table class="table table-striped">
         <thead>
