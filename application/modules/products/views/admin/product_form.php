@@ -354,7 +354,7 @@
                 <div class="col-md-4">
                     <div class="checkbox">
                         <label>
-                            <input type="radio" name="primary_image" value="{{id}}" {{primary}}/> <?php echo lang('main_image');?>
+                            <input type="radio" name="primary_image" value="{{id}}" {{#primary}}checked="checked"{{/primary}}/> <?php echo lang('main_image');?>
                         </label>
                     </div>
                 </div>
