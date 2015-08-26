@@ -28,6 +28,7 @@ class Category extends Front {
         if(!$categories)
         {
             throw_404();
+            return;
         }
 
         $categories['sort'] = $sort;
