@@ -1,2 +1,2 @@
 <?php
-$routes[] = ['GET|POST', '/search/[:code]?/[i:page]?/*', 'GoCart\Controller\Search#index'];
+$routes[] = ['GET|POST', '/search/[:code]?/[:sort]?/[:dir]?/[:page]?', 'GoCart\Controller\Search#index'];
