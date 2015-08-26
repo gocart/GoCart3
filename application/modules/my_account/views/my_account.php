@@ -116,6 +116,6 @@ function closeAddressForm()
 function loadAddresses()
 {
     $('#addresses').spin();
-    $('#addresses').load('/addresses');
+    $('#addresses').load('<?php echo base_url('addresses');?>');
 }
 </script>
