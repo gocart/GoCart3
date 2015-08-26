@@ -1,6 +1,19 @@
 [
     {
         "major":3,
+        "date":"2015.08.26",
+        "changelog":[
+            "Fix search module for sorting results.",
+            "Fix button clearing on admin product list page.",
+            "Fix 404 PHP errors on nonexistent categories in the front end.",
+            "Remove artificial max file size limit from category image upload.",
+            "Delete category image file when deleting a category.",
+            "Fix restoring primary radio button to product forms on edit.",
+            "Fix address ajax call on GoCart installs that reside in a subfolder."
+        ]
+    },
+    {
+        "major":3,
         "date":"2015.08.20",
         "changelog":[
             "Fix category sort links on front end."
