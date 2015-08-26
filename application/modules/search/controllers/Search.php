@@ -11,10 +11,10 @@
 
 class Search extends Front {
 
-    public function index($code=false, $page = 0)
+    public function index($code=false, $sort='name', $dir="ASC", $page = 0)
     {
 
-        $pagination_base_url = site_url('search/'.$code);
+        $pagination_base_url = site_url('search/'.$code.'/'.$sort.'/'.$dir);
 
         //how many products do we want to display per page?
         //this is configurable from the admin settings page.
@@ -40,7 +40,7 @@ class Search extends Front {
 
                 // no code? redirect so we can have the code in place for the sorting.
                 // I know this isn't the best way...
-                redirect('search/'.$code.'/'.$page);
+                redirect('search/'.$code.'/'.$sort.'/'.$dir.'/'.$page);
             }
         }
         else
@@ -49,24 +49,10 @@ class Search extends Front {
             $term = \CI::Search()->getTerm($code);
         }
 
-        //fix for the category view page.
-        $data['base_url'] = [];
-
-        $sortArray = array(
-                            'name/asc' => array('by' => 'name', 'sort'=>'ASC'),
-                            'name/desc' => array('by' => 'name', 'sort'=>'DESC'),
-                            'price/asc' => array('by' => 'price', 'sort'=>'ASC'),
-                            'price/desc' => array('by' => 'price', 'sort'=>'DESC'),
-                            );
-        $sortBy = array('by'=>false, 'sort'=>false);
-    
-        if(isset($_GET['by']))
-        {
-            if(isset($sortArray[$_GET['by']]))
-            {
-                $sortBy = $sortArray[$_GET['by']];
-            }
-        }
+        $data['sort'] = $sort;
+        $data['dir'] = $dir;
+        $data['code'] = $code;
+        $data['page'] = $page;
 
         if(empty($term))
         {
@@ -78,13 +64,13 @@ class Search extends Front {
         {
 
 
-            $result = \CI::Products()->search_products($term, $per_page, $page, $sortBy['by'], $sortBy['sort']);
+            $result = \CI::Products()->search_products($term, $per_page, $page, $sort, $dir);
 
             $config['total_rows'] = $result['count'];
 
             \CI::load()->library('pagination');
             $config['base_url'] = $pagination_base_url;
-            $config['uri_segment'] = 3;
+            $config['uri_segment'] = 5;
             $config['per_page'] = $per_page;
             $config['num_links'] = 3;
             $config['total_rows'] = $result['count'];
@@ -95,7 +81,7 @@ class Search extends Front {
 
             $data['category'] = (object)['name'=>str_replace('{term}', $term, lang('search_title'))];
 
-            $this->view('categories/category', $data);
+            $this->view('search', $data);
         }
     }
 }
