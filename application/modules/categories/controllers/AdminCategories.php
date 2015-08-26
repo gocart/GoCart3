@@ -36,7 +36,6 @@ class AdminCategories extends Admin {
         
         $config['upload_path'] = 'uploads/images/full';
         $config['allowed_types'] = 'gif|jpg|png';
-        $config['max_size'] = config_item('size_limit');
         $config['max_width'] = '1024';
         $config['max_height'] = '768';
         $config['encrypt_name'] = true;
@@ -244,7 +243,7 @@ class AdminCategories extends Admin {
                 $save['enabled_'.$group->id] = \CI::input()->post('enabled_'.$group->id);
             }
             
-            \CI::Categories()->save($save);
+            $category_id = \CI::Categories()->save($save);
             
             \CI::session()->set_flashdata('message', lang('message_category_saved'));
             
@@ -260,6 +259,24 @@ class AdminCategories extends Admin {
         //if the category does not exist, redirect them to the customer list with an error
         if ($category)
         {
+            if($category->image != '')
+            {
+                $file = [];
+                $file[] = 'uploads/images/full/'.$category->image;
+                $file[] = 'uploads/images/medium/'.$category->image;
+                $file[] = 'uploads/images/small/'.$category->image;
+                $file[] = 'uploads/images/thumbnails/'.$category->image;
+                
+                foreach($file as $f)
+                {
+                    //delete the existing file if needed
+                    if(file_exists($f))
+                    {
+                        unlink($f);
+                    }
+                }
+            }
+
             \CI::Categories()->delete($id);
             
             \CI::session()->set_flashdata('message', lang('message_delete_category'));

@@ -24,7 +24,7 @@
         <div class="form-group">
             <label for="image"><?php echo lang('image');?> </label>
             <div class="input-append">
-                <?php echo form_upload(array('name'=>'image', 'class'=>'form-control'));?><div class="add-on"><?php echo lang('max_file_size');?> <?php echo  config_item('size_limit')/1024; ?>kb</div>
+                <?php echo form_upload(array('name'=>'image', 'class'=>'form-control'));?>
             </div>
                 
             <?php if($id && $image != ''):?>
