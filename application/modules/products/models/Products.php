@@ -323,14 +323,14 @@ Class Products extends CI_Model
         CI::db()->select('*, LEAST(IFNULL(NULLIF(saleprice_'.$this->customer->group_id.', 0), price_'.$this->customer->group_id.'), price_'.$this->customer->group_id.') as sort_price', false);
         //this one counts the total number for our pagination
         CI::db()->where('enabled_'.$this->customer->group_id, 1);
-        CI::db()->where('(name LIKE "%'.$term.'%" OR description LIKE "%'.$term.'%" OR excerpt LIKE "%'.$term.'%" OR sku LIKE "%'.$term.'%")');
+        CI::db()->where('(name LIKE "%'.CI::db()->escape_like_str($term).'%" OR description LIKE "%'.CI::db()->escape_like_str($term).'%" OR excerpt LIKE "%'.CI::db()->escape_like_str($term).'%" OR sku LIKE "%'.CI::db()->escape_like_str($term).'%")');
         $results['count'] = CI::db()->count_all_results('products');
 
 
         CI::db()->select('*, saleprice_'.$this->customer->group_id.' as saleprice, price_'.$this->customer->group_id.' as price, LEAST(IFNULL(NULLIF(saleprice_'.$this->customer->group_id.', 0), price_'.$this->customer->group_id.'), price_'.$this->customer->group_id.') as sort_price', false);
         //this one gets just the ones we need.
         CI::db()->where('enabled_'.$this->customer->group_id, 1);
-        CI::db()->where('(name LIKE "%'.$term.'%" OR description LIKE "%'.$term.'%" OR excerpt LIKE "%'.$term.'%" OR sku LIKE "%'.$term.'%")');
+        CI::db()->where('(name LIKE "%'.CI::db()->escape_like_str($term).'%" OR description LIKE "%'.CI::db()->escape_like_str($term).'%" OR excerpt LIKE "%'.CI::db()->escape_like_str($term).'%" OR sku LIKE "%'.CI::db()->escape_like_str($term).'%")');
 
         if($by && $sort)
         {

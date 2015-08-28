@@ -1,6 +1,13 @@
 [
     {
         "major":3,
+        "date":"2015.08.28",
+        "changelog":[
+            "Escape search term in query for products and orders."
+        ]
+    },
+    {
+        "major":3,
         "date":"2015.08.26",
         "changelog":[
             "Fix search module for sorting results.",

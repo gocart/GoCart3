@@ -114,13 +114,13 @@ Class Orders extends CI_Model
             }
 
             $like = '';
-            $like .= "( `order_number` ".$not."LIKE '%".$t."%' " ;
-            $like .= $operator." `billing`.`firstname` ".$not."LIKE '%".$t."%'  ";
-            $like .= $operator." `billing`.`lastname` ".$not."LIKE '%".$t."%'  ";
-            $like .= $operator." `shipping`.`firstname` ".$not."LIKE '%".$t."%'  ";
-            $like .= $operator." `shipping`.`lastname` ".$not."LIKE '%".$t."%'  ";
-            $like .= $operator." `status` ".$not."LIKE '%".$t."%' ";
-            $like .= $operator." `notes` ".$not."LIKE '%".$t."%' )";
+            $like .= "( `order_number` ".$not."LIKE '%".CI::db()->escape_like_str($t)."%' " ;
+            $like .= $operator." `billing`.`firstname` ".$not."LIKE '%".CI::db()->escape_like_str($t)."%'  ";
+            $like .= $operator." `billing`.`lastname` ".$not."LIKE '%".CI::db()->escape_like_str($t)."%'  ";
+            $like .= $operator." `shipping`.`firstname` ".$not."LIKE '%".CI::db()->escape_like_str($t)."%'  ";
+            $like .= $operator." `shipping`.`lastname` ".$not."LIKE '%".CI::db()->escape_like_str($t)."%'  ";
+            $like .= $operator." `status` ".$not."LIKE '%".CI::db()->escape_like_str($t)."%' ";
+            $like .= $operator." `notes` ".$not."LIKE '%".CI::db()->escape_like_str($t)."%' )";
 
             CI::db()->where($like);
         }
