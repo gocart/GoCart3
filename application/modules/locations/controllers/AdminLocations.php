@@ -63,7 +63,7 @@ class AdminLocations extends Admin {
             $data = array_merge($data, $country);
             if(empty($data['address_format']))
             {
-                $data['address_format'] = "<strong>{company}, {firstname} {lastname}</strong>\n<small>{phone} | {email}\n{address1}\n{address2}\n{city}, {zone} {zip}\n{country}</small>";
+                $data['address_format'] = "<strong>{% if company %} {{company}}, {% endif %}{{firstname}} {{lastname}}</strong><br><small>{{phone}} | {{email}}<br>{{address1}}<br>{% if address2 %}{{address2}}<br>{% endif %}{{city}} {{zip}}<br> {{zone}}<br>{{country}}</small>";
             }
         }
         
