@@ -1,6 +1,13 @@
 [
     {
         "major":3,
+        "date":"2015.10.01",
+        "changelog":[
+            "Update default address format to use a twig based template."
+        ]
+    },
+    {
+        "major":3,
         "date":"2015.08.28",
         "changelog":[
             "Escape search term in query for products and orders."
