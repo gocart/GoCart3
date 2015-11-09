@@ -1,6 +1,13 @@
 [
     {
         "major":3,
+        "date":"2015.11.09",
+        "changelog":[
+            "Bug fix on GoCart.php library related to calculating shipping rates with a coupon added."
+        ]
+    },
+    {
+        "major":3,
         "date":"2015.10.01",
         "changelog":[
             "Update default address format to use a twig based template."

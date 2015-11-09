@@ -24,14 +24,14 @@ class GoCart {
 
     public function saveCart()
     {
-        //is the shipping method still valid?
-        $this->testShippingMethodValidity();
-
         //calculate coupon discounts first
         $this->calculateCouponDiscounts();
 
         //add up the subtotal (coupon discounts included at line items)
         $this->getSubtotal();
+        
+        //is the shipping method still valid?
+        $this->testShippingMethodValidity();
 
         //calculate tax based on post-coupon price
         $this->setTaxes();
