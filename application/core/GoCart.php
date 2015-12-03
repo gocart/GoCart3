@@ -116,7 +116,13 @@ class GoCart {
             $timesAvailable = $coupon->max_product_instances;
         } elseif($coupon->max_uses > 0 && $coupon->max_product_instances == 0)
         {
-            $timesAvailable = max($coupon->max_uses - $coupon->num_uses, 0);
+            $usesLeft = max($coupon->max_uses - $coupon->num_uses, 0);
+
+            //if there are more than 0 return -1 so the coupon can be used on the whole order
+            if($usesLeft == 0)
+            {
+                $timesAvailable = 0;
+            }
         }
 
         return $timesAvailable;
@@ -808,7 +814,8 @@ class GoCart {
 
         $orderNumber = $this->cart->order_number;
 
-        $this->saveCart();
+        //save order to the database
+        CI::Orders()->saveOrder((array)$this->cart);
 
         //refresh the cart
         $this->getCart(true);

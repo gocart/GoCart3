@@ -1,6 +1,13 @@
 [
     {
         "major":3,
+        "date":"2015.12.02",
+        "changelog":[
+            "Fix a bug related calculating and saving one time use coupons."
+        ]
+    },
+    {
+        "major":3,
         "date":"2015.11.09",
         "changelog":[
             "Bug fix on GoCart.php library related to calculating shipping rates with a coupon added."
