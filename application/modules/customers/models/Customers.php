@@ -1,5 +1,5 @@
 <?php
-Class Customers extends CI_Model
+class Customers extends CI_Model
 {
     public function createGuest()
     {
@@ -19,11 +19,10 @@ Class Customers extends CI_Model
         ]);
     }
 
-    public function get_customers($limit=0, $offset=0, $order_by='id', $direction='DESC')
+    public function get_customers($limit = 0, $offset = 0, $order_by = 'id', $direction = 'DESC')
     {
         CI::db()->where('is_guest', 0)->order_by($order_by, $direction);
-        if($limit>0)
-        {
+        if ($limit>0) {
             CI::db()->limit($limit, $offset);
         }
 
@@ -31,7 +30,7 @@ Class Customers extends CI_Model
         return $result->result();
     }
 
-    public function get_customer_export($limit=0, $offset=0, $order_by='id', $direction='DESC')
+    public function get_customer_export($limit = 0, $offset = 0, $order_by = 'id', $direction = 'DESC')
     {
         return CI::db()->where('is_guest', 0)->get('customers')->result();
     }
@@ -75,25 +74,21 @@ Class Customers extends CI_Model
 
     public function save_address($data)
     {
-        if(!empty($data['id']))
-        {
-            /***************************
+        if (!empty($data['id'])) {
+        /***************************
             when saving an address that already exists, make sure it's not in use before updating it.
             if it is in use, set the previous instance to deleted and insert the changes as a new record
             ****************************/
             $used = CI::db()->where('shipping_address_id', $data['id'])->or_where('billing_address_id', $data['id'])->count_all_results('orders');
 
-            if($used > 0)
-            {
+            if ($used > 0) {
                 CI::db()->where('id', $data['id']);
                 CI::db()->update('customers_address_bank', ['deleted'=>1]);
                 
                 $data['id'] = false;// set ID to false
                 CI::db()->insert('customers_address_bank', $data);
                 return CI::db()->insert_id();
-            }
-            else
-            {
+            } else {
                 CI::db()->where('id', $data['id']);
                 CI::db()->update('customers_address_bank', $data);
                 return $data['id'];
@@ -113,14 +108,11 @@ Class Customers extends CI_Model
 
     public function save($customer)
     {
-        if($customer['id'])
-        {
+        if ($customer['id']) {
             CI::db()->where('id', $customer['id']);
             CI::db()->update('customers', $customer);
             return $customer['id'];
-        }
-        else
-        {
+        } else {
             CI::db()->insert('customers', $customer);
             return CI::db()->insert_id();
         }
@@ -152,8 +144,7 @@ Class Customers extends CI_Model
         CI::db()->select('id');
         $result = CI::db()->get_where('orders', array('customer_id'=>$id));
         $result = $result->result();
-        foreach ($result as $order)
-        {
+        foreach ($result as $order) {
             CI::db()->where('order_id', $order->id);
             CI::db()->delete('order_items');
         }
@@ -163,23 +154,19 @@ Class Customers extends CI_Model
         CI::db()->delete('orders');
     }
 
-    public function check_email($str, $id=false)
+    public function check_email($str, $id = false)
     {
         CI::db()->select('email');
         CI::db()->from('customers');
         CI::db()->where('is_guest', 0)->where('email', $str);
-        if ($id)
-        {
+        if ($id) {
             CI::db()->where('id !=', $id);
         }
         $count = CI::db()->count_all_results();
 
-        if ($count > 0)
-        {
+        if ($count > 0) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -188,21 +175,18 @@ Class Customers extends CI_Model
     {
         CI::load()->library('encrypt');
         $customer = $this->get_customer_by_email($email);
-        if ($customer)
-        {
+        if ($customer) {
             CI::load()->helper('string');
             CI::load()->library('email');
 
             $newPassword = random_string('alnum', 8);
-            $customer['password'] = sha1($newPassword);
+            $customer['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
             $this->save($customer);
 
             GoCart\Emails::resetPasswordCustomer($newPassword, $email);
             
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -232,8 +216,7 @@ Class Customers extends CI_Model
 
     public function save_group($data)
     {
-        if(!empty($data['id']))
-        {
+        if (!empty($data['id'])) {
             CI::db()->where('id', $data['id'])->update('customer_groups', $data);
             return $data['id'];
         } else {
@@ -243,18 +226,18 @@ Class Customers extends CI_Model
             //create the new fields.
             CI::load()->dbforge();
             $fields = [
-                'enabled_'.$groupId=>[
+                'enabled'.$groupId=>[
                     'type'=>'TINYINT',
                     'constraint'=>'1',
                     'default'=>'1'
                 ],
                 'price_'.$groupId=>[
-                    'type'=>'DECIMAL', 
+                    'type'=>'DECIMAL',
                     'constraint'=>'10,2',
                     'default'=>'0.00'
                 ],
                 'saleprice_'.$groupId=>[
-                    'type'=>'DECIMAL', 
+                    'type'=>'DECIMAL',
                     'constraint'=>'10,2',
                     'default'=>'0.00'
                 ]
@@ -263,7 +246,7 @@ Class Customers extends CI_Model
             CI::dbforge()->add_column('order_items', $fields);
 
             $fields = [
-                'enabled_'.$groupId=>[
+                'enabled'.$groupId=>[
                     'type'=>'TINYINT',
                     'constraint'=>'1',
                     'default'=>'1'

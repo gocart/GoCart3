@@ -1,12 +1,11 @@
 <?php
-Class Orders extends CI_Model
+class Orders extends CI_Model
 {
 
     private function arrangeSalesFigures($values)
     {
         $return = [];
-        foreach($values as $val)
-        {
+        foreach ($values as $val) {
             $return[$val->month] = $val->total;
         }
         return $return;
@@ -77,8 +76,7 @@ Class Orders extends CI_Model
         CI::db()->group_by('YEAR(ordered_on)');
         $records = CI::db()->get('orders')->result();
         $years = [];
-        foreach($records as $r)
-        {
+        foreach ($records as $r) {
             $years[] = $r->year;
         }
         return $years;
@@ -88,8 +86,7 @@ Class Orders extends CI_Model
     {
         $fields = \CI::db()->list_fields('customers_address_bank');
         $select = '';
-        foreach($fields as $field)
-        {
+        foreach ($fields as $field) {
             $select .= ', shipping.'.$field.' as shipping_'.$field.', billing.'.$field.' as billing_'.$field.' ';
         }
 
@@ -101,16 +98,14 @@ Class Orders extends CI_Model
         //support multiple words
         $term = explode(' ', $str);
 
-        foreach($term as $t)
-        {
+        foreach ($term as $t) {
             $not = '';
             $operator = 'OR';
-            if(substr($t,0,1) == '-')
-            {
+            if (substr($t, 0, 1) == '-') {
                 $not = 'NOT ';
                 $operator = 'AND';
                 //trim the - sign off
-                $t = substr($t,1,strlen($t));
+                $t = substr($t, 1, strlen($t));
             }
 
             $like = '';
@@ -126,7 +121,7 @@ Class Orders extends CI_Model
         }
     }
 
-    public function getOrders($search=false, $sort_by='', $sort_order='DESC', $limit=0, $offset=0)
+    public function getOrders($search = false, $sort_by = '', $sort_order = 'DESC', $limit = 0, $offset = 0)
     {
         $select = 'orders.*'.$this->getAddressSelect();
 
@@ -135,33 +130,27 @@ Class Orders extends CI_Model
         \CI::db()->select($select)->join('customers_address_bank as shipping', 'shipping.id = orders.shipping_address_id', 'left');
         \CI::db()->join('customers_address_bank as billing', 'billing.id = orders.billing_address_id', 'left');
 
-        if ($search)
-        {
-            if(!empty($search->term))
-            {
+        if ($search) {
+            if (!empty($search->term)) {
                 $this->getOrderSearchLike($search->term);
             }
-            if(!empty($search->start_date))
-            {
-                CI::db()->where('ordered_on >=',$search->start_date);
+            if (!empty($search->start_date)) {
+                CI::db()->where('ordered_on >=', $search->start_date);
             }
-            if(!empty($search->end_date))
-            {
-                //increase by 1 day to make this include the final day
+            if (!empty($search->end_date)) {
+            //increase by 1 day to make this include the final day
                 //I tried <= but it did not public function. Any ideas why?
                 $search->end_date = date('Y-m-d', strtotime($search->end_date)+86400);
-                CI::db()->where('ordered_on <',$search->end_date);
+                CI::db()->where('ordered_on <', $search->end_date);
             }
         }
 
 
 
-        if($limit>0)
-        {
+        if ($limit>0) {
             CI::db()->limit($limit, $offset);
         }
-        if(!empty($sort_by))
-        {
+        if (!empty($sort_by)) {
             CI::db()->order_by($sort_by, $sort_order);
         }
 
@@ -170,25 +159,21 @@ Class Orders extends CI_Model
         return CI::db()->get('orders')->result();
     }
 
-    public function getOrderCount($search=false)
+    public function getOrderCount($search = false)
     {
 
         \CI::db()->join('customers_address_bank as shipping', 'shipping.id = orders.shipping_address_id', 'left');
         \CI::db()->join('customers_address_bank as billing', 'billing.id = orders.billing_address_id', 'left');
 
-        if ($search)
-        {
-            if(!empty($search->term))
-            {
+        if ($search) {
+            if (!empty($search->term)) {
                 $this->getOrderSearchLike($search->term);
             }
-            if(!empty($search->start_date))
-            {
-                CI::db()->where('ordered_on >=',$search->start_date);
+            if (!empty($search->start_date)) {
+                CI::db()->where('ordered_on >=', $search->start_date);
             }
-            if(!empty($search->end_date))
-            {
-                CI::db()->where('ordered_on <',$search->end_date);
+            if (!empty($search->end_date)) {
+                CI::db()->where('ordered_on <', $search->end_date);
             }
         }
 
@@ -196,7 +181,7 @@ Class Orders extends CI_Model
     }
 
     //get an individual customers orders
-    public function getCustomerOrders($id, $offset=0)
+    public function getCustomerOrders($id, $offset = 0)
     {
         CI::db()->order_by('ordered_on', 'DESC');
         CI::db()->where(['customer_id' => $id, 'status !=' => 'cart']);
@@ -221,8 +206,7 @@ Class Orders extends CI_Model
     {
         $fields = \CI::db()->list_fields('customers_address_bank');
         $select = 'orders.*, customers.*, orders.id as id ';
-        foreach($fields as $field)
-        {
+        foreach ($fields as $field) {
             $select .= ', shipping.'.$field.' as shipping_'.$field.', billing.'.$field.' as billing_'.$field.' ';
         }
         \CI::db()->select($select)->join('customers', 'customers.id = orders.customer_id', 'left')->join('customers_address_bank as shipping', 'shipping.id = orders.shipping_address_id', 'left')->join('customers_address_bank as billing', 'billing.id = orders.billing_address_id', 'left');
@@ -231,8 +215,7 @@ Class Orders extends CI_Model
         $result = \CI::db()->get('orders');
         $order = $result->row();
 
-        if(!$order)
-        {
+        if (!$order) {
             return false;
         }
         $order->items = $this->getItems($order->id);
@@ -256,10 +239,8 @@ Class Orders extends CI_Model
         $files = CI::db()->select('*, order_item_files.id as id')->where('order_id', $id)->join('digital_products', 'digital_products.id = order_item_files.file_id')->get('order_item_files')->result();
 
         $return = [];
-        foreach($files as $file)
-        {   
-            if(!isset($return[$file->order_item_id]))
-            {
+        foreach ($files as $file) {
+            if (!isset($return[$file->order_item_id])) {
                 $return[$file->order_item_id] = [];
             }
             
@@ -275,10 +256,8 @@ Class Orders extends CI_Model
 
         $return =[];
 
-        foreach($optionValues as $optionValue)
-        {
-            if(!isset($return[$optionValue->order_item_id]))
-            {
+        foreach ($optionValues as $optionValue) {
+            if (!isset($return[$optionValue->order_item_id])) {
                 $return[$optionValue->order_item_id] = [];
             }
             $return[$optionValue->order_item_id][] = $optionValue;
@@ -296,13 +275,10 @@ Class Orders extends CI_Model
 
     function saveOrderItemFile($file)
     {
-        if(!empty($file['id']))
-        {
+        if (!empty($file['id'])) {
             CI::db()->where('id', $file['id']);
             CI::db()->update('order_item_files', $file);
-        }
-        else
-        {
+        } else {
             CI::db()->insert('order_item_files', $file);
         }
     }
@@ -330,14 +306,11 @@ Class Orders extends CI_Model
 
     public function saveItem($data)
     {
-        if (isset($data['id']))
-        {
+        if (isset($data['id'])) {
             CI::db()->where('id', $data['id']);
             CI::db()->update('order_items', $data);
             return $data['id'];
-        }
-        else
-        {
+        } else {
             CI::db()->insert('order_items', $data);
             return CI::db()->insert_id();
         }
@@ -345,14 +318,11 @@ Class Orders extends CI_Model
 
     public function saveItemOption($data)
     {
-        if (isset($data['id']))
-        {
+        if (isset($data['id'])) {
             CI::db()->where('id', $data['id']);
             CI::db()->update('order_item_options', $data);
             return $data['id'];
-        }
-        else
-        {
+        } else {
             CI::db()->insert('order_item_options', $data);
             return CI::db()->insert_id();
         }
@@ -361,10 +331,10 @@ Class Orders extends CI_Model
     public function moveOrderItems($oldId, $newId)
     {
         //move order items
-        CI::db()->where('order_id', $oldId)->set('order_id',$newId)->update('order_items');
+        CI::db()->where('order_id', $oldId)->set('order_id', $newId)->update('order_items');
 
         //move order item options
-        CI::db()->where('order_id', $oldId)->set('order_id',$newId)->update('order_item_options');
+        CI::db()->where('order_id', $oldId)->set('order_id', $newId)->update('order_item_options');
     }
 
     public function savePaymentInfo($info)
@@ -379,26 +349,21 @@ Class Orders extends CI_Model
 
     public function saveOrder($data, $contents = false)
     {
-        if (isset($data['id']))
-        {
+        if (isset($data['id'])) {
             CI::db()->where('id', $data['id']);
             CI::db()->update('orders', $data);
             $id = $data['id'];
-        }
-        else
-        {
+        } else {
             CI::db()->insert('orders', $data);
             $id = CI::db()->insert_id();
         }
 
         //if there are items being submitted with this order add them now
-        if($contents)
-        {
-            // clear existing order items
+        if ($contents) {
+        // clear existing order items
             CI::db()->where('order_id', $id)->delete('order_items');
             // update order items
-            foreach($contents as $item)
-            {
+            foreach ($contents as $item) {
                 $save = [];
                 $save['contents'] = $item;
 
@@ -414,19 +379,16 @@ Class Orders extends CI_Model
 
     public function getBestSellers($start, $end)
     {
-        if(!empty($start))
-        {
+        if (!empty($start)) {
             CI::db()->where('ordered_on >=', $start);
         }
-        if(!empty($end))
-        {
-            CI::db()->where('ordered_on <',  $end);
+        if (!empty($end)) {
+            CI::db()->where('ordered_on <', $end);
         }
 
         // just fetch a list of order id's
-        $orders = CI::db()->select('sum(quantity) as quantity_sold, order_items.name as name, sku')->group_by('product_id')->order_by('quantity_sold', 'DESC')->where('status !=','cart')->where('order_items.type', 'product')->join('order_items', 'order_items.order_id = orders.id')->get('orders')->result();
+        $orders = CI::db()->select('sum(quantity) as quantity_sold, order_items.name as name, sku')->group_by('product_id')->order_by('quantity_sold', 'DESC')->where('status !=', 'cart')->where('order_items.type', 'product')->join('order_items', 'order_items.order_id = orders.id')->get('orders')->result();
 
         return $orders;
     }
-
 }

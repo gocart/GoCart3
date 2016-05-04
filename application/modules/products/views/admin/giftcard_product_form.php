@@ -15,7 +15,7 @@ $(document).ready(function() {
     $(".sortable > col-md-").disableSelection();
     //if the image already exists (phpcheck) enable the selector
 
-    <?php if($id) : ?>
+    <?php if ($id) : ?>
     //options related
     var ct  = $('#option_list').children().size();
     // set initial count
@@ -66,7 +66,7 @@ function remove_option(id)
 </script>
 
 
-<?php echo form_open('admin/products/gift-card-form/'.$id ); ?>
+<?php echo form_open('admin/products/gift-card-form/'.$id); ?>
     <div class="row">
         <div class="col-md-9">
             <div class="tabbable">
@@ -118,7 +118,7 @@ function remove_option(id)
 
                 <div class="tab-pane" id="product_categories">
 
-                    <?php if(isset($categories[0])):?>
+                    <?php if (isset($categories[0])) :?>
                         <label><strong><?php echo lang('select_a_category');?></strong></label>
                         <table class="table table-striped">
                             <thead>
@@ -129,9 +129,10 @@ function remove_option(id)
                                 </tr>
                             </thead>
                         <?php
-                        function list_categories($parent_id, $cats, $sub='', $product_categories, $primary_category) {
+                        function list_categories($parent_id, $cats, $sub = '', $product_categories, $primary_category)
+                        {
 
-                            foreach ($cats[$parent_id] as $cat):?>
+                            foreach ($cats[$parent_id] as $cat) :?>
                             <tr>
                                 <td><?php echo  $sub.$cat->name; ?></td>
                                 <td>
@@ -142,8 +143,7 @@ function remove_option(id)
                                 </td>
                             </tr>
                             <?php
-                            if (isset($cats[$cat->id]) && sizeof($cats[$cat->id]) > 0)
-                            {
+                            if (isset($cats[$cat->id]) && sizeof($cats[$cat->id]) > 0) {
                                 $sub2 = str_replace('&rarr;&nbsp;', '&nbsp;', $sub);
                                     $sub2 .=  '&nbsp;&nbsp;&nbsp;&rarr;&nbsp;';
                                 list_categories($cat->id, $cats, $sub2, $product_categories, $primary_category);
@@ -157,7 +157,7 @@ function remove_option(id)
                         ?>
 
                     </table>
-                <?php else:?>
+                <?php else :?>
                     <div class="alert"><?php echo lang('no_available_categories');?></div>
                 <?php endif;?>
 
@@ -178,27 +178,23 @@ function remove_option(id)
                             <tbody>
                                 <?php
                                 $counter = 0;
-                                if(!empty($ProductOptions))
+                                if (!empty($ProductOptions)) {
                                 
-                                {
-                                    
-                                    foreach($ProductOptions as $po)
-                                    {
+                                    foreach ($ProductOptions as $po) {
                                         $po = (object)$po;
-                                        if(empty($po->required)){$po->required = false;
-                                    }
+                                        if (empty($po->required)) {
+                                            $po->required = false;
+                                        }
 
-                                    if($po->type == 'droplist')
-                                    { 
-                                        if($po->values):
-                                            foreach($po->values as $value)
-                                            {
-                                                $value = (object)$value;
-                                                add_option_value($po, $counter++, $value->price);
-                                                $GLOBALS['option_value_count']++;
-                                            }
-                                        endif;
-                                    }
+                                        if ($po->type == 'droplist') {
+                                            if ($po->values) :
+                                                foreach ($po->values as $value) {
+                                                    $value = (object)$value;
+                                                    add_option_value($po, $counter++, $value->price);
+                                                    $GLOBALS['option_value_count']++;
+                                                }
+                                            endif;
+                                        }
                                         $counter++;
                                     }
                                 }
@@ -215,10 +211,8 @@ function remove_option(id)
                     <div id="gc_photos">
 
                     <?php
-                    foreach($images as $photo_id=>$photo_obj)
-                    {
-                        if(!empty($photo_obj))
-                        {
+                    foreach ($images as $photo_id => $photo_obj) {
+                        if (!empty($photo_obj)) {
                             $photo = (array)$photo_obj;
                             add_image($photo_id, $photo['filename'], $photo['alt'], $photo['caption'], isset($photo['primary']));
                         }
@@ -234,7 +228,7 @@ function remove_option(id)
         <div class="col-md-3">
 
             <div class="form-group">
-                <?php echo form_dropdown('taxable', [0 => lang('not_taxable'), 1 => lang('taxable')], assign_value('taxable',$taxable), 'class="form-control"'); ?>
+                <?php echo form_dropdown('taxable', [0 => lang('not_taxable'), 1 => lang('taxable')], assign_value('taxable', $taxable), 'class="form-control"'); ?>
             </div>
 
             <div class="form-group">
@@ -242,13 +236,13 @@ function remove_option(id)
                 <?php echo form_input(['name'=>'sku', 'value'=>assign_value('sku', $sku), 'class'=>'form-control']);?>
             </div>
 
-            <?php foreach($groups as $group):?>
+            <?php foreach ($groups as $group) :?>
                 <fieldset>
                     <legend>
                         <?php echo $group->name;?>
                         <div class="checkbox pull-right" style="font-size:16px; margin-top:5px;">
                             <label>
-                                <?php echo form_checkbox('enabled_'.$group->id, 1, ${'enabled_'.$group->id}); ?> <?php echo lang('enabled');?>
+                                <?php echo form_checkbox('enabled'.$group->id, 1, ${'enabled'.$group->id}); ?> <?php echo lang('enabled');?>
                             </label>
                         </div>
                     </legend>
@@ -260,7 +254,7 @@ function remove_option(id)
 </form>
 
 <?php
-function add_image($photo_id, $filename, $alt, $caption, $primary=false)
+function add_image($photo_id, $filename, $alt, $caption, $primary = false)
 {
 
     ob_start();
@@ -280,7 +274,9 @@ function add_image($photo_id, $filename, $alt, $caption, $primary=false)
                 <div class="col-md-4">
                     <div class="checkbox">
                         <label>
-                            <input type="radio" name="primary_image" value="<?php echo $photo_id;?>" <?php if($primary) echo 'checked="checked"';?>/> <?php echo lang('main_image');?>
+                            <input type="radio" name="primary_image" value="<?php echo $photo_id;?>" <?php if ($primary) {
+                                echo 'checked="checked"';
+}?>/> <?php echo lang('main_image');?>
                         </label>
                     </div>
                 </div>
@@ -306,8 +302,9 @@ function add_image($photo_id, $filename, $alt, $caption, $primary=false)
 }
 
 //this makes it easy to use the same code for initial generation of the form as well as javascript additions
-function replace_newline($string) {
-  return trim((string)str_replace(array("\r", "\r\n", "\n", "\t"), ' ', $string));
+function replace_newline($string)
+{
+    return trim((string)str_replace(array("\r", "\r\n", "\n", "\t"), ' ', $string));
 }
 ?>
 

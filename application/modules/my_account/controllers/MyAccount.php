@@ -1,4 +1,5 @@
 <?php namespace GoCart\Controller;
+
 /**
  * MyAccount Class
  *
@@ -9,7 +10,8 @@
  * @link        http://gocartdv.com
  */
 
-class MyAccount extends Front {
+class MyAccount extends Front
+{
 
     var $customer;
 
@@ -21,7 +23,7 @@ class MyAccount extends Front {
         $this->customer = \CI::Login()->customer();
     }
 
-    public function index($offset=0)
+    public function index($offset = 0)
     {
         //make sure they're logged in
         \CI::Login()->isLoggedIn('my-account');
@@ -76,30 +78,24 @@ class MyAccount extends Front {
         \CI::form_validation()->set_rules('company', 'lang:address_company', 'trim|max_length[128]');
         \CI::form_validation()->set_rules('firstname', 'lang:address_firstname', 'trim|required|max_length[32]');
         \CI::form_validation()->set_rules('lastname', 'lang:address_lastname', 'trim|required|max_length[32]');
-        \CI::form_validation()->set_rules('email', 'lang:address_email', ['trim','required','valid_email','max_length[128]', ['check_email_callable', function($str){
+        \CI::form_validation()->set_rules('email', 'lang:address_email', ['trim','required','valid_email','max_length[128]', ['check_email_callable', function ($str) {
             return $this->check_email($str);
         }]]);
         \CI::form_validation()->set_rules('phone', 'lang:address_phone', 'trim|required|max_length[32]');
         \CI::form_validation()->set_rules('email_subscribe', 'lang:account_newsletter_subscribe', 'trim|numeric|max_length[1]');
 
-        if(\CI::input()->post('password') != '' || \CI::input()->post('confirm') != '')
-        {
-            \CI::form_validation()->set_rules('password', 'Password', 'required|min_length[6]|sha1');
+        if (\CI::input()->post('password') != '' || \CI::input()->post('confirm') != '') {
+            \CI::form_validation()->set_rules('password', 'Password', 'required|min_length[6]');
             \CI::form_validation()->set_rules('confirm', 'Confirm Password', 'required|matches[password]');
-        }
-        else
-        {
+        } else {
             \CI::form_validation()->set_rules('password', 'Password');
             \CI::form_validation()->set_rules('confirm', 'Confirm Password');
         }
 
 
-        if (\CI::form_validation()->run() == FALSE)
-        {
+        if (\CI::form_validation()->run() == false) {
             $this->view('my_account', $data);
-        }
-        else
-        {
+        } else {
             $customer = [];
             $customer['id'] = $this->customer->id;
             $customer['company'] = \CI::input()->post('company');
@@ -108,8 +104,7 @@ class MyAccount extends Front {
             $customer['email'] = \CI::input()->post('email');
             $customer['phone'] = \CI::input()->post('phone');
             $customer['email_subscribe'] = intval((bool)\CI::input()->post('email_subscribe'));
-            if(\CI::input()->post('password') != '')
-            {
+            if (\CI::input()->post('password') != '') {
                 $customer['password'] = \CI::input()->post('password');
             }
 
@@ -125,23 +120,17 @@ class MyAccount extends Front {
 
     public function check_email($str)
     {
-        if(!empty($this->customer->id))
-        {
+        if (!empty($this->customer->id)) {
             $email = \CI::Customers()->check_email($str, $this->customer->id);
-        }
-        else
-        {
+        } else {
             $email = \CI::Customers()->check_email($str);
         }
 
-        if ($email)
-        {
+        if ($email) {
             \CI::form_validation()->set_message('check_email_callable', lang('error_email'));
-            return FALSE;
-        }
-        else
-        {
-            return TRUE;
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -150,16 +139,13 @@ class MyAccount extends Front {
         $filedata = \CI::DigitalProducts()->get_file_info_by_link($link);
 
         // missing file (bad link)
-        if(!$filedata)
-        {
+        if (!$filedata) {
             show_404();
         }
 
         // validate download counter
-        if($filedata->max_downloads > 0)
-        {
-            if(intval($filedata->downloads) >= intval($filedata->max_downloads))
-            {
+        if ($filedata->max_downloads > 0) {
+            if (intval($filedata->downloads) >= intval($filedata->max_downloads)) {
                 show_404();
             }
         }

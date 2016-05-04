@@ -1,8 +1,10 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if (! defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 class Auth
 {
-    public function check_access($access, $defaultRedirect=false, $redirect = false)
+    public function check_access($access, $defaultRedirect = false, $redirect = false)
     {
         /*
         we could store this in the session, but by accessing it this way
@@ -20,30 +22,20 @@ class Auth
         
         //result should be an object I was getting odd errors in relation to the object.
         //if $result is an array then the problem is present.
-        if(!$result || is_array($result))
-        {
+        if (!$result || is_array($result)) {
             $this->logout();
             return false;
         }
     //  echo $result->access;
-        if ($access)
-        {
-            if ($access == $result->access)
-            {
+        if ($access) {
+            if ($access == $result->access) {
                 return true;
-            }
-            else
-            {
-                if ($redirect)
-                {
+            } else {
+                if ($redirect) {
                     redirect($redirect);
-                }
-                elseif($defaultRedirect)
-                {
+                } elseif ($defaultRedirect) {
                     redirect('admin');
-                }
-                else
-                {
+                } else {
                     return false;
                 }
             }
@@ -66,68 +58,57 @@ class Auth
 
         $admin = CI::session()->userdata('admin');
         
-        if (!$admin)
-        {
-            //check the cookie
-            if(isset($_COOKIE['GoCartAdmin']))
-            {
-                //the cookie is there, lets log the customer back in.
-                if($_COOKIE['GoCartAdmin'])
-                {
+        if (!$admin) {
+        //check the cookie
+            if (isset($_COOKIE['GoCartAdmin'])) {
+            //the cookie is there, lets log the customer back in.
+                if ($_COOKIE['GoCartAdmin']) {
                     $result = CI::db()->select('*, sha1(username+password) as hash')->get('admin')->row_array();
-                    if($result)
-                    {
-                        //unset these 2 fields
+                    if ($result) {
+                    //unset these 2 fields
                         unset($result['password']);
                         unset($result['hash']);
 
                         CI::session()->set_userdata(['admin'=>$result]);
 
-                        if ($redirect)
-                        {
+                        if ($redirect) {
                             CI::session()->set_flashdata('redirect', $redirect);
                         }
                             
-                        if ($defaultRedirect)
-                        {   
+                        if ($defaultRedirect) {
                             redirect(CI::uri()->uri_string());
                         }
                     }
                 }
             }
 
-            if($redirect && $defaultRedirect)
-            redirect('admin/login');
+            if ($redirect && $defaultRedirect) {
+                redirect('admin/login');
+            }
 
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
     /*
     this function does the logging in.
     */
-    public function login_admin($username, $password, $remember=false)
+    public function login_admin($username, $password, $remember = false)
     {
         // make sure the username doesn't go into the query as false or 0
-        if(!$username)
-        {
+        if (!$username) {
             return false;
         }
 
         CI::db()->select('*');
         CI::db()->where('username', $username);
-        CI::db()->where('password',  sha1($password));
         CI::db()->limit(1);
         $result = CI::db()->get('admin');
         $result = $result->row_array();
         
-        if (sizeof($result) > 0)
-        {
-            if($remember)
-            {
+        if (password_verify($password, $result['password']) == true && sizeof($result) > 0) {
+            if ($remember) {
                 //generate a remember cookie
                 $loginCred =  sha1($username.$result['password']);
                 $this->generateCookie($loginCred, strtotime('+6 months')); //remember the user for 6 months
@@ -141,9 +122,7 @@ class Auth
             CI::session()->set_userdata(['admin'=>$result]);
 
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -169,21 +148,18 @@ class Auth
     public function resetPassword($username)
     {
         $admin = $this->getAdminByUsername($username);
-        if ($admin)
-        {
+        if ($admin) {
             CI::load()->helper('string');
             CI::load()->library('email');
             
             $newPassword = random_string('alnum', 8);
-            $admin['password'] = sha1($newPassword);
+            $admin['password'] = password_hash($newPassword, PASSWORD_DEFAULT);
             $this->save($admin);
             
-            \GoCart\Emails::resetPassword($newPassword,$admin['email']);
+            \GoCart\Emails::resetPassword($newPassword, $admin['email']);
 
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -200,12 +176,9 @@ class Auth
         $result = CI::db()->get('admin');
         $result = $result->row_array();
 
-        if (sizeof($result) > 0)
-        {
-            return $result; 
-        }
-        else
-        {
+        if (sizeof($result) > 0) {
+            return $result;
+        } else {
             return false;
         }
     }
@@ -215,13 +188,10 @@ class Auth
     */
     public function save($admin)
     {
-        if ($admin['id'])
-        {
+        if ($admin['id']) {
             CI::db()->where('id', $admin['id']);
             CI::db()->update('admin', $admin);
-        }
-        else
-        {
+        } else {
             CI::db()->insert('admin', $admin);
         }
     }
@@ -263,50 +233,40 @@ class Auth
         CI::db()->where('id', $str);
         $count = CI::db()->count_all_results();
         
-        if ($count > 0)
-        {
+        if ($count > 0) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
     
-    public function check_username($str, $id=false)
+    public function check_username($str, $id = false)
     {
         CI::db()->select('username');
         CI::db()->from('admin');
         CI::db()->where('username', $str);
-        if ($id)
-        {
+        if ($id) {
             CI::db()->where('id !=', $id);
         }
         $count = CI::db()->count_all_results();
         
-        if ($count > 0)
-        {
+        if ($count > 0) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     public function delete($id)
     {
-        if ($this->checkId($id))
-        {
+        if ($this->checkId($id)) {
             $admin  = $this->getAdmin($id);
             CI::db()->where('id', $id);
             CI::db()->limit(1);
             CI::db()->delete('admin');
 
             return $admin->firstname.' '.$admin->lastname.' has been removed.';
-        }
-        else
-        {
+        } else {
             return 'The admin could not be found.';
         }
     }

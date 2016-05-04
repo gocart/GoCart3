@@ -1,4 +1,5 @@
 <?php namespace GoCart\Controller;
+
 /**
  * AdminProducts Class
  *
@@ -9,7 +10,8 @@
  * @link        http://gocartdv.com
  */
 
-class AdminProducts extends Admin {
+class AdminProducts extends Admin
+{
 
     public function __construct()
     {
@@ -22,7 +24,7 @@ class AdminProducts extends Admin {
         \CI::lang()->load('products');
     }
 
-    public function index($rows=100, $order_by="name", $sort_order="ASC", $code=0, $page=0)
+    public function index($rows = 100, $order_by = "name", $sort_order = "ASC", $code = 0, $page = 0)
     {
         $data['groups'] = \CI::Customers()->get_groups();
         $data['page_title'] = lang('products');
@@ -35,14 +37,11 @@ class AdminProducts extends Admin {
 
         $post = \CI::input()->post(null, false);
         \CI::load()->model('Search');
-        if($post)
-        {
+        if ($post) {
             $term = json_encode($post);
             $code = \CI::Search()->recordTerm($term);
             $data['code'] = $code;
-        }
-        elseif ($code)
-        {
+        } elseif ($code) {
             $term = \CI::Search()->getTerm($code);
         }
 
@@ -99,18 +98,14 @@ class AdminProducts extends Admin {
         $name = trim(\CI::input()->post('name'));
         $limit = \CI::input()->post('limit');
 
-        if(empty($name))
-        {
+        if (empty($name)) {
             echo json_encode([]);
-        }
-        else
-        {
+        } else {
             $results = \CI::Products()->product_autocomplete($name, $limit);
 
             $return = [];
 
-            foreach($results as $r)
-            {
+            foreach ($results as $r) {
                 $return[$r->id] = $r->name;
             }
             echo json_encode($return);
@@ -122,14 +117,12 @@ class AdminProducts extends Admin {
     {
         $products = \CI::input()->post('product');
 
-        if(!$products)
-        {
+        if (!$products) {
             \CI::session()->set_flashdata('error', lang('error_bulk_no_products'));
             redirect('admin/products');
         }
 
-        foreach($products as $id=>$product)
-        {
+        foreach ($products as $id => $product) {
             $product['id'] = $id;
             \CI::Products()->save($product);
         }
@@ -175,9 +168,8 @@ class AdminProducts extends Admin {
         $data['product_files'] = [];
         $data['productOptions'] = [];
 
-        foreach($data['groups'] as $group)
-        {
-            $data['enabled_'.$group->id] = '';
+        foreach ($data['groups'] as $group) {
+            $data['enabled'.$group->id] = '';
             $data['price_'.$group->id] = '';
             $data['saleprice_'.$group->id] = '';
         }
@@ -186,12 +178,10 @@ class AdminProducts extends Admin {
         //create the photos array for later use
         $data['photos'] = [];
 
-        if ($id)
-        {
-            // get the existing file associations and create a format we can read from the form to set the checkboxes
+        if ($id) {
+        // get the existing file associations and create a format we can read from the form to set the checkboxes
             $pr_files = \CI::DigitalProducts()->getAssociationsByProduct($id);
-            foreach($pr_files as $f)
-            {
+            foreach ($pr_files as $f) {
                 $data['product_files'][]  = $f->file_id;
             }
 
@@ -200,8 +190,7 @@ class AdminProducts extends Admin {
             $product = \CI::Products()->find($id, true);
 
             //if the product does not exist, redirect them to the product list with an error
-            if (!$product)
-            {
+            if (!$product) {
                 \CI::session()->set_flashdata('error', lang('error_not_found'));
                 redirect('admin/products');
             }
@@ -227,20 +216,16 @@ class AdminProducts extends Admin {
             $data['taxable'] = $product->taxable;
             $data['fixed_quantity'] = $product->fixed_quantity;
 
-            foreach($data['groups'] as $group)
-            {
-                $data['enabled_'.$group->id] = $product->{'enabled_'.$group->id};
+            foreach ($data['groups'] as $group) {
+                $data['enabled'.$group->id] = $product->{'enabled'.$group->id};
                 $data['price_'.$group->id] = $product->{'price_'.$group->id};
                 $data['saleprice_'.$group->id] = $product->{'saleprice_'.$group->id};
             }
 
             //make sure we haven't submitted the form yet before we pull in the images/related products from the database
-            if(!\CI::input()->post('submit'))
-            {
-
+            if (!\CI::input()->post('submit')) {
                 $data['product_categories'] = [];
-                foreach($product->categories as $product_category)
-                {
+                foreach ($product->categories as $product_category) {
                     $data['product_categories'][] = $product_category->id;
                 }
 
@@ -250,12 +235,10 @@ class AdminProducts extends Admin {
         }
 
         //if $data['related_products'] is not an array, make it one.
-        if(!is_array($data['related_products']))
-        {
+        if (!is_array($data['related_products'])) {
             $data['related_products']   = [];
         }
-        if(!is_array($data['product_categories']))
-        {
+        if (!is_array($data['product_categories'])) {
             $data['product_categories'] = [];
         }
 
@@ -278,9 +261,8 @@ class AdminProducts extends Admin {
         \CI::form_validation()->set_rules('taxable', 'lang:taxable', 'trim|numeric');
         \CI::form_validation()->set_rules('fixed_quantity', 'lang:fixed_quantity', 'trim|numeric');
 
-        foreach($data['groups'] as $group)
-        {
-            \CI::form_validation()->set_rules('enabled_'.$group->id, lang('enabled').'('.$group->name.')', 'trim|numeric');
+        foreach ($data['groups'] as $group) {
+            \CI::form_validation()->set_rules('enabled'.$group->id, lang('enabled').'('.$group->name.')', 'trim|numeric');
             \CI::form_validation()->set_rules('price_'.$group->id, lang('price').'('.$group->name.')', 'trim|numeric|floatval');
             \CI::form_validation()->set_rules('saleprice_'.$group->id, lang('saleprice').'('.$group->name.')', 'trim|numeric|floatval');
         }
@@ -293,13 +275,11 @@ class AdminProducts extends Admin {
         submit button has a value, so we can see when it's posted
         */
 
-        if($duplicate)
-        {
+        if ($duplicate) {
             $data['id'] = false;
         }
-        if(\CI::input()->post('submit'))
-        {
-            //reset the product options that were submitted in the post
+        if (\CI::input()->post('submit')) {
+        //reset the product options that were submitted in the post
             $data['ProductOptions'] = \CI::input()->post('option');
             $data['related_products'] = \CI::input()->post('related_products');
             $data['product_categories'] = \CI::input()->post('categories');
@@ -308,24 +288,20 @@ class AdminProducts extends Admin {
 
         }
 
-        if (\CI::form_validation()->run() == FALSE)
-        {
+        if (\CI::form_validation()->run() == false) {
             $this->view('product_form', $data);
-        }
-        else
-        {
+        } else {
             \CI::load()->helper('text');
 
             //first check the slug field
             $slug = \CI::input()->post('slug');
 
             //if it's empty assign the name field
-            if(empty($slug) || $slug=='')
-            {
+            if (empty($slug) || $slug=='') {
                 $slug = \CI::input()->post('name');
             }
 
-            $slug = url_title(convert_accented_characters($slug), '-', TRUE);
+            $slug = url_title(convert_accented_characters($slug), '-', true);
 
             //validate the slug
             $slug = ($id) ? \CI::Products()->validate_slug($slug, $product->id) : \CI::Products()->validate_slug($slug);
@@ -347,9 +323,8 @@ class AdminProducts extends Admin {
             
             $post_images = \CI::input()->post('images');
 
-            foreach($data['groups'] as $group)
-            {
-                $save['enabled_'.$group->id] = \CI::input()->post('enabled_'.$group->id);
+            foreach ($data['groups'] as $group) {
+                $save['enabled'.$group->id] = \CI::input()->post('enabled'.$group->id);
                 $save['price_'.$group->id] = \CI::input()->post('price_'.$group->id);
                 $save['saleprice_'.$group->id] = \CI::input()->post('saleprice_'.$group->id);
             }
@@ -357,14 +332,10 @@ class AdminProducts extends Admin {
             $save['slug'] = $slug;
 
 
-            if($primary = \CI::input()->post('primary_image'))
-            {
-                if($post_images)
-                {
-                    foreach($post_images as $key => &$pi)
-                    {
-                        if($primary == $key)
-                        {
+            if ($primary = \CI::input()->post('primary_image')) {
+                if ($post_images) {
+                    foreach ($post_images as $key => &$pi) {
+                        if ($primary == $key) {
                             $pi['primary']  = true;
                             continue;
                         }
@@ -376,43 +347,32 @@ class AdminProducts extends Admin {
             $save['images'] = json_encode($post_images);
 
 
-            if(\CI::input()->post('related_products'))
-            {
+            if (\CI::input()->post('related_products')) {
                 $save['related_products'] = json_encode(\CI::input()->post('related_products'));
-            }
-            else
-            {
+            } else {
                 $save['related_products'] = '';
             }
 
             //save categories
             $categories = \CI::input()->post('categories');
-            if(!$categories)
-            {
+            if (!$categories) {
                 $categories = [];
             }
 
              //(\CI::input()->post('primary_category')) ? \CI::input()->post('primary_category') : 0;
-            if(!\CI::input()->post('primary_category') && $categories)
-            {
+            if (!\CI::input()->post('primary_category') && $categories) {
                 $save['primary_category'] = $categories[0];
-            }
-            elseif(!\CI::input()->post('primary_category') && !$categories)
-            {
+            } elseif (!\CI::input()->post('primary_category') && !$categories) {
                 $save['primary_category'] = 0;
-            }
-            else
-            {
+            } else {
                 $save['primary_category'] = \CI::input()->post('primary_category');
             }
 
 
             // format options
             $options = [];
-            if(\CI::input()->post('option'))
-            {
-                foreach (\CI::input()->post('option') as $option)
-                {
+            if (\CI::input()->post('option')) {
+                foreach (\CI::input()->post('option') as $option) {
                     $options[]  = $option;
                 }
 
@@ -426,10 +386,8 @@ class AdminProducts extends Admin {
             \CI::DigitalProducts()->disassociate(false, $product_id);
             // save new
             $downloads = \CI::input()->post('downloads');
-            if(is_array($downloads))
-            {
-                foreach($downloads as $d)
-                {
+            if (is_array($downloads)) {
+                foreach ($downloads as $d) {
                     \CI::DigitalProducts()->associate($d, $product_id);
                 }
             }
@@ -469,24 +427,20 @@ class AdminProducts extends Admin {
         $data['product_categories'] = [];
         $data['product_files'] = [];
 
-        foreach($data['groups'] as $group)
-        {
-            $data['enabled_'.$group->id] = '';
+        foreach ($data['groups'] as $group) {
+            $data['enabled'.$group->id] = '';
         }
 
         //create the photos array for later use
         $data['photos'] = [];
 
-        if ($id)
-        {
-
-            // get product & options data
+        if ($id) {
+        // get product & options data
             $data['ProductOptions'] = \CI::ProductOptions()->getProductOptions($id);
             $product = \CI::Products()->find($id, true);
 
             //if the product does not exist, redirect them to the product list with an error
-            if (!$product)
-            {
+            if (!$product) {
                 \CI::session()->set_flashdata('error', lang('error_not_found'));
                 redirect('admin/products');
             }
@@ -508,18 +462,14 @@ class AdminProducts extends Admin {
             $data['taxable']            = $product->taxable;
             $data['fixed_quantity']     = $product->fixed_quantity;
             $data['is_giftcard']        = $product->is_giftcard;
-            foreach($data['groups'] as $group)
-            {
-                $data['enabled_'.$group->id] = $product->{'enabled_'.$group->id};
+            foreach ($data['groups'] as $group) {
+                $data['enabled'.$group->id] = $product->{'enabled'.$group->id};
             }
 
             //make sure we haven't submitted the form yet before we pull in the images/related products from the database
-            if(!\CI::input()->post('submit'))
-            {
-
+            if (!\CI::input()->post('submit')) {
                 $data['product_categories'] = [];
-                foreach($product->categories as $product_category)
-                {
+                foreach ($product->categories as $product_category) {
                     $data['product_categories'][] = $product_category->id;
                 }
 
@@ -528,8 +478,7 @@ class AdminProducts extends Admin {
             }
         }
 
-        if(!is_array($data['product_categories']))
-        {
+        if (!is_array($data['product_categories'])) {
             $data['product_categories'] = [];
         }
 
@@ -549,9 +498,8 @@ class AdminProducts extends Admin {
         \CI::form_validation()->set_rules('fixed_quantity', 'lang:fixed_quantity', 'trim|numeric');
         
         \CI::form_validation()->set_rules('option[giftcard_values]', 'lang:giftcard_values', 'required');
-        foreach($data['groups'] as $group)
-        {
-            \CI::form_validation()->set_rules('enabled_'.$group->id, lang('enabled').'('.$group->name.')', 'trim|numeric');
+        foreach ($data['groups'] as $group) {
+            \CI::form_validation()->set_rules('enabled'.$group->id, lang('enabled').'('.$group->name.')', 'trim|numeric');
         }
         /*
         if we've posted already, get the photo stuff and organize it
@@ -561,37 +509,31 @@ class AdminProducts extends Admin {
         submit button has a value, so we can see when it's posted
         */
 
-        if($duplicate)
-        {
+        if ($duplicate) {
             $data['id'] = false;
         }
-        if(\CI::input()->post('submit'))
-        {
-            //reset the product options that were submitted in the post
+        if (\CI::input()->post('submit')) {
+        //reset the product options that were submitted in the post
             $data['ProductOptions'] = \CI::input()->post('option');
             $data['product_categories'] = \CI::input()->post('categories');
             $data['images'] = \CI::input()->post('images');
 
         }
 
-        if (\CI::form_validation()->run() == FALSE)
-        {
+        if (\CI::form_validation()->run() == false) {
             $this->view('giftcard_product_form', $data);
-        }
-        else
-        {
+        } else {
             \CI::load()->helper('text');
 
             //first check the slug field
             $slug = \CI::input()->post('slug');
 
             //if it's empty assign the name field
-            if(empty($slug) || $slug=='')
-            {
+            if (empty($slug) || $slug=='') {
                 $slug = \CI::input()->post('name');
             }
 
-            $slug   = url_title(convert_accented_characters($slug), '-', TRUE);
+            $slug   = url_title(convert_accented_characters($slug), '-', true);
 
             //validate the slug
             $slug = ($id) ? \CI::Products()->validate_slug($slug, $product->id) : \CI::Products()->validate_slug($slug);
@@ -605,9 +547,8 @@ class AdminProducts extends Admin {
             $save['description'] = \CI::input()->post('description');
             $save['excerpt'] = \CI::input()->post('excerpt');
             
-            foreach($data['groups'] as $group)
-            {
-                $save['enabled_'.$group->id] = \CI::input()->post('enabled_'.$group->id);
+            foreach ($data['groups'] as $group) {
+                $save['enabled'.$group->id] = \CI::input()->post('enabled'.$group->id);
                 $save['price_'.$group->id] = '0.00';
                 $save['saleprice_'.$group->id] = '0.00';
             }
@@ -620,14 +561,10 @@ class AdminProducts extends Admin {
             $save['slug'] = $slug;
 
 
-            if($primary = \CI::input()->post('primary_image'))
-            {
-                if($post_images)
-                {
-                    foreach($post_images as $key => &$pi)
-                    {
-                        if($primary == $key)
-                        {
+            if ($primary = \CI::input()->post('primary_image')) {
+                if ($post_images) {
+                    foreach ($post_images as $key => &$pi) {
+                        if ($primary == $key) {
                             $pi['primary'] = true;
                             continue;
                         }
@@ -639,33 +576,24 @@ class AdminProducts extends Admin {
             $save['images'] = json_encode($post_images);
 
 
-            if(\CI::input()->post('related_products'))
-            {
+            if (\CI::input()->post('related_products')) {
                 $save['related_products'] = json_encode(\CI::input()->post('related_products'));
-            }
-            else
-            {
+            } else {
                 $save['related_products'] = '';
             }
 
             //save categories
             $categories = \CI::input()->post('categories');
-            if(!$categories)
-            {
+            if (!$categories) {
                 $categories = [];
             }
 
              //(\CI::input()->post('primary_category')) ? \CI::input()->post('primary_category') : 0;
-            if(!\CI::input()->post('primary_category') && $categories)
-            {
+            if (!\CI::input()->post('primary_category') && $categories) {
                 $save['primary_category'] = $categories[0];
-            }
-            elseif(!\CI::input()->post('primary_category') && !$categories)
-            {
+            } elseif (!\CI::input()->post('primary_category') && !$categories) {
                 $save['primary_category'] = 0;
-            }
-            else
-            {
+            } else {
                 $save['primary_category'] = \CI::input()->post('primary_category');
             }
 
@@ -721,10 +649,8 @@ class AdminProducts extends Admin {
 
             $giftcard_values = [];
             $postedValues = \CI::input()->post('option[giftcard_values]');
-            if($postedValues)
-            {
-                foreach($postedValues as $giftcard_value)
-                {
+            if ($postedValues) {
+                foreach ($postedValues as $giftcard_value) {
                     array_push($giftcard_values, ['name'=> 'beginning_amount', 'value' => $giftcard_value, 'weight'=>'', 'price' => $giftcard_value]);
                 }
             }
@@ -771,8 +697,7 @@ class AdminProducts extends Admin {
 
         \CI::load()->library('upload', $config);
 
-        if ( \CI::upload()->do_upload())
-        {
+        if (\CI::upload()->do_upload()) {
             $upload_data    = \CI::upload()->data();
 
             \CI::load()->library('image_lib');
@@ -780,7 +705,7 @@ class AdminProducts extends Admin {
             $config['image_library'] = 'gd2';
             $config['source_image'] = 'uploads/images/full/'.$upload_data['file_name'];
             $config['new_image'] = 'uploads/images/medium/'.$upload_data['file_name'];
-            $config['maintain_ratio'] = TRUE;
+            $config['maintain_ratio'] = true;
             $config['width'] = 600;
             $config['height'] = 500;
             \CI::image_lib()->initialize($config);
@@ -791,7 +716,7 @@ class AdminProducts extends Admin {
             $config['image_library'] = 'gd2';
             $config['source_image'] = 'uploads/images/medium/'.$upload_data['file_name'];
             $config['new_image'] = 'uploads/images/small/'.$upload_data['file_name'];
-            $config['maintain_ratio'] = TRUE;
+            $config['maintain_ratio'] = true;
             $config['width'] = 235;
             $config['height'] = 235;
             \CI::image_lib()->initialize($config);
@@ -802,7 +727,7 @@ class AdminProducts extends Admin {
             $config['image_library'] = 'gd2';
             $config['source_image'] = 'uploads/images/small/'.$upload_data['file_name'];
             $config['new_image'] = 'uploads/images/thumbnails/'.$upload_data['file_name'];
-            $config['maintain_ratio'] = TRUE;
+            $config['maintain_ratio'] = true;
             $config['width'] = 150;
             $config['height'] = 150;
             \CI::image_lib()->initialize($config);
@@ -812,8 +737,7 @@ class AdminProducts extends Admin {
             $data['file_name'] = $upload_data['file_name'];
         }
 
-        if(\CI::upload()->display_errors() != '')
-        {
+        if (\CI::upload()->display_errors() != '') {
             $data['error'] = \CI::upload()->display_errors();
         }
         $this->partial('iframe/product_image_uploader', $data);
@@ -821,17 +745,13 @@ class AdminProducts extends Admin {
 
     public function delete($id = false)
     {
-        if ($id)
-        {
+        if ($id) {
             $product = \CI::Products()->find($id);
             //if the product does not exist, redirect them to the customer list with an error
-            if (!$product)
-            {
+            if (!$product) {
                 \CI::session()->set_flashdata('error', lang('error_not_found'));
                 redirect('admin/products');
-            }
-            else
-            {
+            } else {
 
                 //if the product is legit, delete them
                 \CI::Products()->delete_product($id);
@@ -839,9 +759,7 @@ class AdminProducts extends Admin {
                 \CI::session()->set_flashdata('message', lang('message_deleted_product'));
                 redirect('admin/products');
             }
-        }
-        else
-        {
+        } else {
             //if they do not provide an id send them to the product list page with an error
             \CI::session()->set_flashdata('error', lang('error_not_found'));
             redirect('admin/products');

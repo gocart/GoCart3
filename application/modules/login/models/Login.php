@@ -1,33 +1,27 @@
 <?php
-Class Login extends CI_Model
+class Login extends CI_Model
 {
 
     public function __construct()
     {
         $customer = CI::session()->userdata('customer');
 
-        if(empty($customer))
-        {
-            //If we don't have a customer, check for a cookie.
-            if(isset($_COOKIE['GoCartCustomer']))
-            {
-                //the cookie is there, lets log the customer back in.
+        if (empty($customer)) {
+        //If we don't have a customer, check for a cookie.
+            if (isset($_COOKIE['GoCartCustomer'])) {
+            //the cookie is there, lets log the customer back in.
                 $info = $this->aes256Decrypt(base64_decode($_COOKIE['GoCartCustomer']));
                 $cred = json_decode($info);
 
-                if(is_object($cred))
-                {
+                if (is_object($cred)) {
                     $this->loginCustomer($cred->email, $cred->password, true);
-                    if( ! $this->isLoggedIn() )
-                    {
-                        // cookie data isn't letting us login.
+                    if (! $this->isLoggedIn()) {
+                    // cookie data isn't letting us login.
                         $this->logoutCustomer();
                         $this->createGuest();
                     }
                 }
-            }
-            else
-            {
+            } else {
                 //cookie is empty
                 $this->logoutCustomer();
                 $this->createGuest();
@@ -53,29 +47,24 @@ Class Login extends CI_Model
         setcookie('GoCartCustomer', $data, $expire, '/', $_SERVER['HTTP_HOST'], config_item('ssl_support'), true);
     }
 
-    public function loginCustomer($email, $password, $remember=false)
+    public function loginCustomer($email, $password, $remember = false)
     {
         $customer = CI::db()->where('is_guest', 0)->
                         where('email', $email)->
                         where('active', 1)->
-                        where('password',  $password)->
                         limit(1)->
                         get('customers')->row();
 
-        if ($customer && !(bool)$customer->is_guest)
-        {
-            // Set up any group discount
-            if($customer->group_id != 0)
-            {
+        if ($customer && !(bool)$customer->is_guest && password_verify($password, $customer->password) == true) {
+        // Set up any group discount
+            if ($customer->group_id != 0) {
                 $group = CI::Customers()->get_group($customer->group_id);
-                if($group) // group might not exist
-                {
+                if ($group) { // group might not exist
                     $customer->group = $group;
                 }
             }
 
-            if($remember)
-            {
+            if ($remember) {
                 $loginCred = json_encode(array('email'=>$customer->email, 'password'=>$customer->password));
                 $loginCred = base64_encode($this->aes256Encrypt($loginCred));
                 //remember the user for 6 months
@@ -83,16 +72,13 @@ Class Login extends CI_Model
             }
 
             //combine cart items
-            if($this->customer())
-            {
+            if ($this->customer()) {
                 $oldCustomer = $this->customer();
                 CI::session()->set_userdata('customer', $customer);
                 \GC::combineCart($oldCustomer); // send the logged-in customer data
             }
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -104,24 +90,17 @@ Class Login extends CI_Model
 
         $customer = CI::session()->userdata('customer');
 
-        if(!$customer)
-        {
+        if (!$customer) {
             return false;
         }
 
-        if($customer->is_guest == 1)
-        {
-            if($redirect)
-            {
+        if (isset($customer->is_guest) && $customer->is_guest == 1) {
+            if ($redirect) {
                 redirect($default_redirect);
-            }
-            else
-            {
+            } else {
                 return false;
             }
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
@@ -137,8 +116,7 @@ Class Login extends CI_Model
     private function aes256Encrypt($data)
     {
         $key = config_item('encryption_key');
-        if(32 !== strlen($key))
-        {
+        if (32 !== strlen($key)) {
             $key = hash('SHA256', $key, true);
         }
         $padding = 16 - (strlen($data) % 16);
@@ -149,8 +127,7 @@ Class Login extends CI_Model
     private function aes256Decrypt($data)
     {
         $key = config_item('encryption_key');
-        if(32 !== strlen($key))
-        {
+        if (32 !== strlen($key)) {
             $key = hash('SHA256', $key, true);
         }
         $data = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $data, MCRYPT_MODE_CBC, str_repeat("\0", 16));
