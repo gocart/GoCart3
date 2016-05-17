@@ -19,7 +19,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 */
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 
-$config['base_url'] = $protocol.$_SERVER['SERVER_NAME'];
+$config['base_url'] = $protocol.$_SERVER['HTTP_HOST'];
+$config['base_url'] .= preg_replace('@/+$@', '', dirname($_SERVER['SCRIPT_NAME'])).'/';
 
 /*
 |--------------------------------------------------------------------------
