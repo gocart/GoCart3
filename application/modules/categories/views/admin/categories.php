@@ -16,7 +16,7 @@ function areyousure()
         <tr>
             <th><i class="icon-eye-slash"></i></th>
             <th><?php echo lang('name')?></th>
-            <?php foreach($groups as $group):?>
+            <?php foreach ($groups as $group) :?>
                 <th><?php echo $group->name;?></th>
             <?php endforeach; ?>
             <th></th>
@@ -25,14 +25,15 @@ function areyousure()
     <tbody>
         <?php echo (count($categories) < 1)?'<tr><td style="text-align:center;" colspan="4">'.lang('no_categories').'</td></tr>':''?>
         <?php
-        function list_categories($parent_id, $cats, $groups, $sub='', $hidden=false) {
+        function list_categories($parent_id, $cats, $groups, $sub = '', $hidden = false)
+        {
             
-            foreach ($cats[$parent_id] as $cat):?>
+            foreach ($cats[$parent_id] as $cat) :?>
             <tr>
                 <td><?php echo ($hidden)?'<i class="icon-eye-slash"></i>':'';?></td>
                 <td><?php echo $sub.$cat->name; ?></td>
-                <?php foreach($groups as $group):?>
-                    <td><?php echo ($cat->{'enabled_'.$group->id} == '1') ? lang('enabled') : lang('disabled'); ?></td>
+                <?php foreach ($groups as $group) :?>
+                    <td><?php echo ($cat->{'enabled'.$group->id} == '1') ? lang('enabled') : lang('disabled'); ?></td>
                 <?php endforeach;?>
                 <td class="text-right">
                     <div class="btn-group">
@@ -42,8 +43,7 @@ function areyousure()
                 </td>
             </tr>
             <?php
-            if (isset($cats[$cat->id]) && sizeof($cats[$cat->id]) > 0)
-            {
+            if (isset($cats[$cat->id]) && sizeof($cats[$cat->id]) > 0) {
                 $sub2 = str_replace('&rarr;&nbsp;', '&nbsp;', $sub);
                     $sub2 .=  '&nbsp;&nbsp;&nbsp;&rarr;&nbsp;';
                 list_categories($cat->id, $cats, $groups, $sub2, $hidden);
@@ -51,13 +51,11 @@ function areyousure()
             endforeach;
         }
         
-        if(isset($categories[-1]))
-        {
+        if (isset($categories[-1])) {
             list_categories(-1, $categories, $groups, '', true);
         }
 
-        if(isset($categories[0]))
-        {
+        if (isset($categories[0])) {
             list_categories(0, $categories, $groups);
         }
         

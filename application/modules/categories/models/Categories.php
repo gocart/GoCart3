@@ -9,7 +9,7 @@
  * @link http://gocartdv.com
  */
 
-Class Categories
+class Categories
 {
 
     var $tiered;
@@ -23,22 +23,17 @@ Class Categories
 
     public function tier($parent_id)
     {
-        if(isset($this->tiered[$parent_id]))
-        {
+        if (isset($this->tiered[$parent_id])) {
             return $this->tiered[$parent_id];
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     public function getBySlug($slug)
     {
-        foreach($this->tiered['all'] as $c)
-        {
-            if($c->slug == $slug)
-            {
+        foreach ($this->tiered['all'] as $c) {
+            if ($c->slug == $slug) {
                 return $c;
                 break;
             }
@@ -52,8 +47,7 @@ Class Categories
         $category = $this->getBySlug($slug);
 
         //if the category does not exist return false
-        if(!$category || !$category->{'enabled_'.$this->customer->group_id})
-        {
+        if (!$category || !$category->{'enabled'.$this->customer->group_id}) {
             return false;
         }
 
@@ -71,8 +65,7 @@ Class Categories
 
     public function get_categories($parent = false)
     {
-        if ($parent !== false)
-        {
+        if ($parent !== false) {
             CI::db()->where('parent_id', $parent);
         }
         CI::db()->select('id');
@@ -83,8 +76,7 @@ Class Categories
         $result = CI::db()->get('categories');
         
         $categories = [];
-        foreach($result->result() as $cat)
-        {
+        foreach ($result->result() as $cat) {
             $categories[] = $this->find($cat->id);
         }
         
@@ -93,14 +85,12 @@ Class Categories
     
     public function get_categories_tiered($admin = false)
     {
-        if(!$admin && !empty($this->tiered))
-        {
+        if (!$admin && !empty($this->tiered)) {
             return $this->tiered;
         }
 
-        if(!$admin)
-        {
-            CI::db()->where('enabled_'.$this->customer->group_id, 1);
+        if (!$admin && !empty($this->customer->group_id)) {
+            CI::db()->where('enabled');
         }
         
         CI::db()->order_by('sequence');
@@ -109,10 +99,10 @@ Class Categories
         
         $results = [];
         $results['all'] = [];
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
 
             // Set a class to active, so we can highlight our current category
-            if(CI::uri()->segment(2) == $category->slug && CI::uri()->segment(1) == 'category') {
+            if (CI::uri()->segment(2) == $category->slug && CI::uri()->segment(1) == 'category') {
                 $category->active = true;
             } else {
                 $category->active = false;
@@ -121,8 +111,7 @@ Class Categories
             $results[$category->parent_id][$category->id] = $category;
         }
         
-        if(!$admin)
-        {
+        if (!$admin) {
             $this->tiered = $results;
         }
 
@@ -133,19 +122,15 @@ Class Categories
     {
         $cats = $this->get_categories_tiered(true);
         $options = [-1 => lang('hidden'), 0 => lang('top_level_category')];
-        $listCategories = function($parent_id, $sub='') use (&$options, $cats, &$listCategories, $hideId) {
+        $listCategories = function ($parent_id, $sub = '') use (&$options, $cats, &$listCategories, $hideId) {
             
-            if(isset($cats[$parent_id]))
-            {
-                foreach ($cats[$parent_id] as $cat)
-                {
+            if (isset($cats[$parent_id])) {
+                foreach ($cats[$parent_id] as $cat) {
                     //if this matches the hide id, skip it and all it's children
-                    if(!$hideId || $cat->id != $hideId)
-                    {
+                    if (!$hideId || $cat->id != $hideId) {
                         $options[$cat->id] = $sub.$cat->name;
 
-                        if (isset($cats[$cat->id]) && sizeof($cats[$cat->id]) > 0)
-                        {
+                        if (isset($cats[$cat->id]) && sizeof($cats[$cat->id]) > 0) {
                             $sub2 = str_replace('&rarr;&nbsp;', '&nbsp;', $sub);
                             $sub2 .=  '&nbsp;&nbsp;&nbsp;&rarr;&nbsp;';
                             $listCategories($cat->id, $sub2);
@@ -179,12 +164,11 @@ Class Categories
         $result = $result->result();
         
         $contents = [];
-        foreach ($result as $product)
-        {
+        foreach ($result as $product) {
             $result2 = CI::db()->get_where('products', array('id'=>$product->product_id));
             $result2 = $result2->row();
             
-            $contents[] = $result2; 
+            $contents[] = $result2;
         }
         
         return $contents;
@@ -198,8 +182,7 @@ Class Categories
         
         $contents = [];
         $count = 1;
-        foreach ($result as $product)
-        {
+        foreach ($result as $product) {
             $result2 = CI::db()->get_where('products', array('id'=>$product->product_id));
             $result2 = $result2->row();
             
@@ -212,15 +195,12 @@ Class Categories
 
     public function save($category)
     {
-        if ($category['id'])
-        {
+        if ($category['id']) {
             CI::db()->where('id', $category['id']);
             CI::db()->update('categories', $category);
             
             return $category['id'];
-        }
-        else
-        {
+        } else {
             CI::db()->insert('categories', $category);
             return CI::db()->insert_id();
         }
@@ -243,33 +223,25 @@ Class Categories
     * check if slug already exists
     */
 
-    public function validate_slug($slug, $id=false, $counter=false)
+    public function validate_slug($slug, $id = false, $counter = false)
     {
         CI::db()->select('slug');
         CI::db()->from('categories');
         CI::db()->where('slug', $slug.$counter);
-        if ($id)
-        {
+        if ($id) {
             CI::db()->where('id !=', $id);
         }
         $count = CI::db()->count_all_results();
 
-        if ($count > 0)
-        {
-            if(!$counter)
-            {
+        if ($count > 0) {
+            if (!$counter) {
                 $counter = 1;
-            }
-            else
-            {
+            } else {
                 $counter++;
             }
             return $this->validate_slug($slug, $id, $counter);
-        }
-        else
-        {
+        } else {
             return $slug.$counter;
         }
     }
-
 }

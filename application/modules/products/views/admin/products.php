@@ -116,7 +116,7 @@ function areyousure()
                     <?php endif; ?>
                 </td>
                 <?php foreach($groups as $group):?>
-                    <td><?php echo ($product->{'enabled_'.$group->id} == '1') ? lang('enabled') : lang('disabled'); ?></td>
+                    <td><?php echo ($product->{'enabled'.$group->id} == '1') ? lang('enabled') : lang('disabled'); ?></td>
                 <?php endforeach; ?>
                 <td class="text-right">
                     <div class="btn-group">

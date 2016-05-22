@@ -27,7 +27,7 @@
                 <?php echo form_upload(array('name'=>'image', 'class'=>'form-control'));?>
             </div>
                 
-            <?php if($id && $image != ''):?>
+            <?php if ($id && $image != '') :?>
             
             <div style="text-align:center; padding:5px; border:1px solid #ddd;"><img src="<?php echo base_url('uploads/images/small/'.$image);?>" alt="current"/><br/><?php echo lang('current_file');?></div>
             
@@ -35,11 +35,11 @@
         </div>
     </div>
     <div class="col-md-4">
-        <?php foreach($groups as $group):?>
+        <?php foreach ($groups as $group) :?>
             <fieldset>
                 <legend><?php echo $group->name;?></legend>
                 <div class="form-group">
-                    <?php echo form_dropdown('enabled_'.$group->id, [1 => lang('enabled'), 0 => lang('disabled')], assign_value('enabled_'.$group->id,${'enabled_'.$group->id}), 'class="form-control"'); ?>
+                    <?php echo form_dropdown('enabled'.$group->id, [1 => lang('enabled'), 0 => lang('disabled')], assign_value('enabled'.$group->id, ${'enabled'.$group->id}), 'class="form-control"'); ?>
                 </div>
             </fieldset>
         <?php endforeach;?>

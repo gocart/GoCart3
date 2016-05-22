@@ -9,7 +9,8 @@
  * @link        http://gocartdv.com
  */
 
-class GoCart {
+class GoCart
+{
 
     protected $cart;
     protected $customer;
@@ -50,10 +51,8 @@ class GoCart {
 
     public function addGiftCard($giftCard)
     {
-        foreach($this->items as $item)
-        {
-            if($item->description == $giftCard->code && $item->type == 'gift card')
-            {
+        foreach ($this->items as $item) {
+            if ($item->description == $giftCard->code && $item->type == 'gift card') {
                 return ['success'=>false, 'error'=>lang('gift_card_already_applied')];
             }
         }
@@ -68,37 +67,28 @@ class GoCart {
     {
         //get the coupon
         $coupon = \CI::Coupons()->getCouponByCode($code);
-        if(!$coupon)
-        {
+        if (!$coupon) {
             return json_encode(['error'=>lang('invalid_coupon_code')]);
         }
         //is coupon valid
-        if(\CI::Coupons()->isValid($coupon))
-        {
-            //does the coupon apply to any products?
-            if($this->isCouponApplied($coupon))
-            {
+        if (\CI::Coupons()->isValid($coupon)) {
+        //does the coupon apply to any products?
+            if ($this->isCouponApplied($coupon)) {
                 return json_encode(['error'=>lang('coupon_already_applied')]);
-            }
-            else
-            {
+            } else {
                 $item = (object)['product_id'=>0, 'shippable'=>0, 'track_stock'=>0, 'taxable'=>0, 'fixed_quantity'=>1, 'type'=>'coupon', 'name'=>lang('coupon'), 'price'=>0, 'total_price'=>0, 'description'=>$coupon->code, 'excerpt' => json_encode($coupon)];
                 $this->insertItem(['product'=>$item]);
                 return json_encode(['message'=>lang('coupon_applied')]);
             }
-        }
-        else
-        {
+        } else {
             return json_encode(['error'=>lang('coupon_invalid')]);
         }
     }
     
     public function isCouponApplied($coupon)
     {
-        foreach($this->items as $item)
-        {
-            if($item->type == 'coupon' && $item->description == $coupon->code)
-            {
+        foreach ($this->items as $item) {
+            if ($item->type == 'coupon' && $item->description == $coupon->code) {
                 return true;
             }
         }
@@ -108,19 +98,15 @@ class GoCart {
     private function getCouponTimesAvailable($coupon)
     {
         $timesAvailable = -1;
-        if($coupon->max_uses > 0 && $coupon->max_product_instances > 0)
-        {
-            $timesAvailable = min( ($coupon->max_uses - $coupon->num_uses),$coupon->max_product_instances ); //maximum times supported per order & max uses in genreral    
-        } elseif ($coupon->max_uses == 0 && $coupon->max_product_instances > 0)
-        {
+        if ($coupon->max_uses > 0 && $coupon->max_product_instances > 0) {
+            $timesAvailable = min(($coupon->max_uses - $coupon->num_uses), $coupon->max_product_instances); //maximum times supported per order & max uses in genreral
+        } elseif ($coupon->max_uses == 0 && $coupon->max_product_instances > 0) {
             $timesAvailable = $coupon->max_product_instances;
-        } elseif($coupon->max_uses > 0 && $coupon->max_product_instances == 0)
-        {
+        } elseif ($coupon->max_uses > 0 && $coupon->max_product_instances == 0) {
             $usesLeft = max($coupon->max_uses - $coupon->num_uses, 0);
 
             //if there are more than 0 return -1 so the coupon can be used on the whole order
-            if($usesLeft == 0)
-            {
+            if ($usesLeft == 0) {
                 $timesAvailable = 0;
             }
         }
@@ -132,14 +118,10 @@ class GoCart {
     {
         $coupons = [];
         $discounts = [];
-        for($i=0; $i<count($this->items); $i++)
-        {
-            if($this->items[$i]->type == 'coupon')
-            {
+        for ($i=0; $i<count($this->items); $i++) {
+            if ($this->items[$i]->type == 'coupon') {
                 $coupons[] = $this->items[$i];
-            }
-            elseif($this->items[$i]->type == 'product')
-            {
+            } elseif ($this->items[$i]->type == 'product') {
                 //remove all discounts
                 $this->items[$i]->coupon_code = '';
                 $this->items[$i]->coupon_discount = '';
@@ -148,10 +130,8 @@ class GoCart {
         }
 
         $couponsByCode = [];
-        if(count($coupons) > 0)
-        {
-            foreach($coupons as $code)
-            {
+        if (count($coupons) > 0) {
+            foreach ($coupons as $code) {
                 $coupon = \CI::Coupons()->getCouponByCode($code->description);
                 $couponsByCode[$coupon->code] = $coupon;
 
@@ -160,32 +140,24 @@ class GoCart {
                 //store the timesAvailable with the coupon to access shortly
                 $couponsByCode[$coupon->code]->timesAvailable = $timesAvailable;
 
-                for($i=0; $i < count($this->items); $i++)
-                {
-                    if($coupon->whole_order_coupon || in_array($this->items[$i]->product_id, $coupon->product_list))
-                    {
-                        if($this->items[$i]->type == 'product')
-                        {
-                            if($timesAvailable < 0)
-                            {
+                for ($i=0; $i < count($this->items); $i++) {
+                    if ($coupon->whole_order_coupon || in_array($this->items[$i]->product_id, $coupon->product_list)) {
+                        if ($this->items[$i]->type == 'product') {
+                            if ($timesAvailable < 0) {
                                 $quantity = $this->items[$i]->quantity;
-                            }
-                            else
-                            {
+                            } else {
                                 $quantity = min($this->items[$i]->quantity, $timesAvailable);
                             }
 
-                            $key = json_encode(['code'=>$coupon->code, 'itemId'=>$this->items[$i]->id]);
+                                $key = json_encode(['code'=>$coupon->code, 'itemId'=>$this->items[$i]->id]);
 
-                            if($coupon->reduction_type == 'percent')
-                            {
+                            if ($coupon->reduction_type == 'percent') {
                                 $percent = ($coupon->reduction_amount/100);
                                 $discount = $this->items[$i]->total_price * $percent;
 
                                 $discounts[$key] = $discount * $quantity;
-                            }
-                            else //fixed
-                            {
+                            } else //fixed
+                                {
                                 $discounts[$key] = $coupon->reduction_amount * $quantity;
                             }
                         }
@@ -197,8 +169,7 @@ class GoCart {
         //sort descending
         arsort($discounts);
 
-        foreach($discounts as $key => $discount)
-        {
+        foreach ($discounts as $key => $discount) {
             $key = json_decode($key);
             
             $code = $key->code;
@@ -206,36 +177,27 @@ class GoCart {
 
             $coupon = $couponsByCode[$code];
 
-            for($i=0; $i<count($this->items); $i++)
-            {
-                if($this->items[$i]->id == $item)
-                {
-                    if($coupon->timesAvailable < 0)
-                    {
+            for ($i=0; $i<count($this->items); $i++) {
+                if ($this->items[$i]->id == $item) {
+                    if ($coupon->timesAvailable < 0) {
                         $quantity = $this->items[$i]->quantity;
-                    }
-                    else
-                    {
+                    } else {
                         $quantity = min($this->items[$i]->quantity, $coupon->timesAvailable);
                     }
 
-                    $discount = 0; // reset discount
+                        $discount = 0; // reset discount
 
-                    if($coupon->reduction_type == 'percent')
-                    {
+                    if ($coupon->reduction_type == 'percent') {
                         $percent = ($coupon->reduction_amount/100);
                         $discount = $this->items[$i]->total_price * $percent;
-                    }
-                    else //fixed
-                    {
+                    } else //fixed
+                        {
                         $discount = $coupon->reduction_amount;
                     }
 
-                    if(($this->items[$i]->coupon_discount * $this->items[$i]->coupon_discount_quantity) < ($quantity * $discount))
-                    {
+                    if (($this->items[$i]->coupon_discount * $this->items[$i]->coupon_discount_quantity) < ($quantity * $discount)) {
                         //consider adding the previous availability back to the other coupon
-                        if(!empty($this->items[$i]->coupon_code) && $couponsByCode[$this->items[$i]->coupon_code]->timesAvailable >= 0)
-                        {
+                        if (!empty($this->items[$i]->coupon_code) && $couponsByCode[$this->items[$i]->coupon_code]->timesAvailable >= 0) {
                             $couponsByCode[$this->items[$i]->coupon_code]->timesAvailable += $this->items[$i]->coupon_discount_quantity;
                         }
                         // else could go here but if it's less than 0 it's an infinite use coupon
@@ -245,15 +207,13 @@ class GoCart {
 
                         $couponsByCode[$code]->timesAvailable -= $quantity;
                     }
-                }        
+                }
             }
         }
 
         //loop through and resave all items.
-        for($i=0; $i<count($this->items); $i++)
-        {
-            if($this->items[$i]->type == 'product')
-            {
+        for ($i=0; $i<count($this->items); $i++) {
+            if ($this->items[$i]->type == 'product') {
                 $this->insertItem(['product'=>$this->items[$i], 'quantity'=>$this->items[$i]->quantity]);
             }
         }
@@ -264,35 +224,24 @@ class GoCart {
         $total = 0;
 
         $giftCards = [];
-        foreach($this->items as $item)
-        {
-            if($item->type != 'gift card') //gift card
-            {
-                if(isset($item->coupon_discount))
-                {
+        foreach ($this->items as $item) {
+            if ($item->type != 'gift card') { //gift card
+                if (isset($item->coupon_discount)) {
                     $total += ($item->total_price * $item->quantity) - ($item->coupon_discount * $item->coupon_discount_quantity);
-                }
-                else
-                {
+                } else {
                     $total += ($item->total_price * $item->quantity);
                 }
-            }
-            else
-            {
+            } else {
                 $giftCards[] = $item;
             }
         }
 
         $total = round($total, 2);
-        foreach($giftCards as $giftCard)
-        {
-            //find out how much can be applied
-            if($total > $giftCard->price)
-            {
+        foreach ($giftCards as $giftCard) {
+        //find out how much can be applied
+            if ($total > $giftCard->price) {
                 $giftCard->total_price = -($giftCard->price);
-            }
-            else
-            {
+            } else {
                 $giftCard->total_price = -($total);
             }
 
@@ -323,14 +272,11 @@ class GoCart {
 
     public function getCart($refresh = false)
     {
-        if($refresh)
-        {
+        if ($refresh) {
             $this->customer = CI::Login()->customer();
-
             $this->cart = CI::Orders()->getCustomerCart($this->customer->id);
-            if(!$this->cart)
-            {
-                //create a new cart
+            if (empty($this->cart)) {
+            //create a new cart
                 CI::Orders()->saveOrder(['status' => 'cart', 'customer_id' => $this->customer->id]);
                 $this->cart = CI::Orders()->getCustomerCart($this->customer->id);
             }
@@ -342,8 +288,7 @@ class GoCart {
 
     public function getCartItems($refresh = false)
     {
-        if($refresh || empty($this->items))
-        {
+        if ($refresh || empty($this->items)) {
             $this->items = CI::Orders()->getItems($this->cart->id);
         }
 
@@ -352,10 +297,8 @@ class GoCart {
 
     public function getCartItem($id)
     {
-        foreach($this->items as $item)
-        {
-            if($item->id == $id)
-            {
+        foreach ($this->items as $item) {
+            if ($item->id == $id) {
                 return $item;
             }
         }
@@ -370,15 +313,14 @@ class GoCart {
         //remove the following fields
         $remove = ['id', 'primary_category', 'quantity', 'related_products', 'google_feed', 'seo_title', 'meta'];
 
-        foreach($remove as $r)
-        {
+        foreach ($remove as $r) {
             unset($product->$r);
         }
 
         return $product;
     }
 
-    public function insertItem($data=[])
+    public function insertItem($data = [])
     {
         $product = false;
         $quantity = 1;
@@ -388,12 +330,10 @@ class GoCart {
 
         extract($data);
 
-        if(is_int($product))
-        {
+        if (is_int($product)) {
             $product = \CI::Products()->getProduct($product);
 
-            if(!$product)
-            {
+            if (!$product) {
                 return json_encode(['error'=>lang('error_product_not_found')]);
             }
 
@@ -405,20 +345,16 @@ class GoCart {
         }
 
         $update = false;
-        if(empty($product->hash))
-        {
+        if (empty($product->hash)) {
             $product->hash = md5(json_encode($product).json_encode($postedOptions));
 
             //set defaults for new items
             $product->coupon_discount = 0;
             $product->coupon_discount_quantity = 0;
             $product->coupon_code = '';
-        }
-        else
-        {
-            if(!$combine)
-            {
-                //this is an update
+        } else {
+            if (!$combine) {
+            //this is an update
                 $update = true;
             }
             
@@ -431,55 +367,42 @@ class GoCart {
 
         $this->getCartItems(); // refresh the cart items
 
-        foreach($this->items as $item)
-        {
-            if(intval($item->product_id) == intval($product->product_id))
-            {
-                if($item->hash != $product->hash) //if the hashes match, skip this step (this is an update)
-                {
+        foreach ($this->items as $item) {
+            if (intval($item->product_id) == intval($product->product_id)) {
+                if ($item->hash != $product->hash) { //if the hashes match, skip this step (this is an update)
                     $qty_count = $qty_count + $item->quantity;
                 }
 
             }
 
-            if($item->hash == $product->hash && !$update) //if this is an update skip this step
-            {
-                //if the item is already in the cart, send back a message
+            if ($item->hash == $product->hash && !$update) { //if this is an update skip this step
+            //if the item is already in the cart, send back a message
                 return json_encode(['message'=>lang('item_already_added')]);
             }
         }
 
-        if(!config_item('allow_os_purchase') && (bool)$product->track_stock)
-        {
+        if (!config_item('allow_os_purchase') && (bool)$product->track_stock) {
             $stock = \CI::Products()->getProduct($product->product_id);
 
-            if($stock->quantity < $qty_count)
-            {
+            if ($stock->quantity < $qty_count) {
                 return json_encode(['error'=>sprintf(lang('not_enough_stock'), $stock->name, $stock->quantity)]);
             }
         }
 
-        if (!$quantity || $quantity <= 0 || $product->fixed_quantity==1)
-        {
+        if (!$quantity || $quantity <= 0 || $product->fixed_quantity==1) {
             $product->quantity = 1;
-        }
-        else
-        {
+        } else {
             $product->quantity = $quantity;
         }
 
         //create save options array here for use later.
         $saveOptions = [];
 
-        if(!$update && $product->product_id) // if not an update or non-product, try and run the options
-        {
-            //set the base "total_price"
-            if($product->saleprice > 0)
-            {
+        if (!$update && $product->product_id) { // if not an update or non-product, try and run the options
+        //set the base "total_price"
+            if ($product->saleprice > 0) {
                 $product->total_price = $product->saleprice;
-            }
-            else
-            {
+            } else {
                 $product->total_price = $product->price;
             }
 
@@ -492,39 +415,30 @@ class GoCart {
             $optionError = false;
             $optionErrorMessage = lang('option_error').'<br/>';
 
-            foreach($productOptions as $productOption)
-            {
-                // are we missing any required values?
+            foreach ($productOptions as $productOption) {
+            // are we missing any required values?
                 $optionValue = false;
-                if(!empty($postedOptions[$productOption->id]))
-                {
+                if (!empty($postedOptions[$productOption->id])) {
                     $optionValue = $postedOptions[$productOption->id];
                 }
 
-                if((int)$productOption->required && empty($optionValue))
-                {
+                if ((int)$productOption->required && empty($optionValue)) {
                     $optionError = true;
                     $optionErrorMessage .= "- ". $productOption->name .'<br/>';
                     continue; // don't bother processing this particular option any further
                 }
 
-                if(empty($optionValue))
-                {
-                    //empty? Move along, nothing to see here.
+                if (empty($optionValue)) {
+                //empty? Move along, nothing to see here.
                     continue;
                 }
 
                 //create options to save to the database in case we get past the errors
-                if($productOption->type == 'checklist')
-                {
-                    if(is_array($optionValue))
-                    {
-                        foreach($optionValue as $ov)
-                        {
-                            foreach($productOption->values as $productOptionValue)
-                            {
-                                if($productOptionValue->id == $ov)
-                                {
+                if ($productOption->type == 'checklist') {
+                    if (is_array($optionValue)) {
+                        foreach ($optionValue as $ov) {
+                            foreach ($productOption->values as $productOptionValue) {
+                                if ($productOptionValue->id == $ov) {
                                     $saveOptions[] = [
                                         'option_name'=>$productOption->name,
                                         'value'=>$productOptionValue->value,
@@ -537,29 +451,23 @@ class GoCart {
                             }
                         }
                     }
-                }
-                else //every other form type we support
+                } else //every other form type we support
                 {
                     $saveOption = [];
-                    if($productOption->type == 'textfield' || $productOption->type == 'textarea')
-                    {
+                    if ($productOption->type == 'textfield' || $productOption->type == 'textarea') {
                         $productOptionValue = $productOption->values[0];
                         $productOptionValue->value = $optionValue;
-                    }
-                    else //radios and checkboxes
+                    } else //radios and checkboxes
                     {
-                        foreach($productOption->values as $ov)
-                        {
-                            if($ov->id == $optionValue)
-                            {
+                        foreach ($productOption->values as $ov) {
+                            if ($ov->id == $optionValue) {
                                 $productOptionValue = $ov;
                                 break;
                             }
                         }
                         $saveOption['value'] = $optionValue;
                     }
-                    if(isset($productOptionValue))
-                    {
+                    if (isset($productOptionValue)) {
                         $saveOption['option_name'] = $productOption->name;
                         $saveOption['price'] = $productOptionValue->price;
                         $saveOption['weight'] = $productOptionValue->weight;
@@ -575,8 +483,7 @@ class GoCart {
                 }
             }
 
-            if($optionError)
-            {
+            if ($optionError) {
                 return json_encode(['error'=>$optionErrorMessage]);
             }
         }
@@ -585,33 +492,25 @@ class GoCart {
         $product_id = \CI::Orders()->saveItem((array)$product);
 
         //save the options if we have them
-        foreach($saveOptions as $saveOption)
-        {
+        foreach ($saveOptions as $saveOption) {
             $saveOption['order_item_id'] = $product_id;
             $saveOption['order_id'] = $this->cart->id;
             \CI::Orders()->saveItemOption($saveOption);
         }
-        if($update)
-        {
-            foreach($this->items as $key => $item)
-            {
-                if($item->id == $product_id)
-                {
+        if ($update) {
+            foreach ($this->items as $key => $item) {
+                if ($item->id == $product_id) {
                     $this->items[$key] = $product;
                 }
             }
-        }
-        else
-        {
+        } else {
             $product->id = $product_id;
             $this->items[] = $product;
 
 
             //update file downloads
-            if($downloads)
-            {
-                foreach($downloads as $file)
-                {
+            if ($downloads) {
+                foreach ($downloads as $file) {
                     \CI::Orders()->saveOrderItemFile(['order_id'=>$this->cart->id, 'order_item_id'=>$product->id, 'file_id'=>$file->file_id]);
                 }
             }
@@ -620,12 +519,9 @@ class GoCart {
         //get current item count
         $itemCount = $this->totalItems();
 
-        if($update)
-        {
+        if ($update) {
             return json_encode(['message'=>lang('cart_updated'), 'itemCount'=>$itemCount]);
-        }
-        else
-        {
+        } else {
             return json_encode(['message'=>lang('item_added_to_cart'), 'itemCount'=>$itemCount]);
         }
     }
@@ -636,21 +532,14 @@ class GoCart {
         $errors = [];
 
         //if we do not allow overstock sale, then check stock otherwise return an empty array
-        if(!config_item('allow_os_purchase'))
-        {
-            foreach($this->items as $item)
-            {
-                if($item->type == 'product')
-                {
+        if (!config_item('allow_os_purchase')) {
+            foreach ($this->items as $item) {
+                if ($item->type == 'product') {
                     $stock = \CI::Products()->getProduct($item->product_id);
-                    if((bool)$stock->track_stock && $stock->quantity < $item->quantity)
-                    {
-                        if ($stock->quantity < 1)
-                        {
+                    if ((bool)$stock->track_stock && $stock->quantity < $item->quantity) {
+                        if ($stock->quantity < 1) {
                             $errors[$item->id] = lang('this_item_is_out_of_stock'); //completely out of stock.
-                        }
-                        else
-                        {
+                        } else {
                             $errors[$item->id] = str_replace('{quantity}', $stock->quantity, lang('not_enough_stock_quantity'));
                         }
                     }
@@ -664,23 +553,19 @@ class GoCart {
     {
         $errors = [];
         $coupons = [];
-        for($i=0; $i<count($this->items); $i++)
-        {
-            if($this->items[$i]->type == 'coupon')
-            {
+        for ($i=0; $i<count($this->items); $i++) {
+            if ($this->items[$i]->type == 'coupon') {
                 $coupons[] = $this->items[$i];
             }
         }
 
 
-        foreach($coupons as $code)
-        {
+        foreach ($coupons as $code) {
             $coupon = \CI::Coupons()->getCouponByCode($code->description);
 
-            if(!\CI::Coupons()->isValid($coupon))
-            {
-                //coupon is no longer valid
-                $errors[] = json_encode(['error'=>str_replace('{coupon_code}', $code->description,lang('coupon_code_no_longer_valid'))]);
+            if (!\CI::Coupons()->isValid($coupon)) {
+            //coupon is no longer valid
+                $errors[] = json_encode(['error'=>str_replace('{coupon_code}', $code->description, lang('coupon_code_no_longer_valid'))]);
                 //remove the coupon
                 $this->removeItem($code->id);
             }
@@ -690,103 +575,82 @@ class GoCart {
     }
 
     // double check the order before saving
-    public function checkOrder() {
+    public function checkOrder()
+    {
         //start tracking errors
         $errors = [];
 
         $cart = new stdClass();
         $addresses = \CI::Customers()->get_address_list($this->customer->id);
-        foreach($addresses as $address)
-        {
-            if($address['id'] == $this->cart->shipping_address_id)
-            {
+        foreach ($addresses as $address) {
+            if ($address['id'] == $this->cart->shipping_address_id) {
                 $cart->shippingAddress = (object)$address;
             }
-            if($address['id'] == $this->cart->billing_address_id)
-            {
+            if ($address['id'] == $this->cart->billing_address_id) {
                 $cart->billingAddress = (object)$address;
             }
         }
 
         //check shipping
-        if($this->orderRequiresShipping())
-        {
-            if(!$this->getShippingMethod())
-            {
+        if ($this->orderRequiresShipping()) {
+            if (!$this->getShippingMethod()) {
                 $errors['shipping'] = lang('error_choose_shipping');
             }
 
-            if(empty($cart->shippingAddress))
-            {
+            if (empty($cart->shippingAddress)) {
                 $errors['shippingAddress'] = lang('error_shipping_address');
             }
         }
 
-        if(empty($cart->billingAddress))
-        {
+        if (empty($cart->billingAddress)) {
             $errors['billingAddress'] = lang('error_billing_address');
         }
 
         //check coupons
         $checkCoupons = $this->checkCoupons();
-        if(!empty($checkCoupons))
-        {
+        if (!empty($checkCoupons)) {
             $errors['coupons'] = $checkCoupons;
         }
 
         //check the inventory of our products
         $inventory = $this->checkInventory();
-        if(!empty($inventory))
-        {
+        if (!empty($inventory)) {
             $errors['inventory'] = $inventory;
         }
 
         //if we have errors, return them
-        if(!empty($errors))
-        {
+        if (!empty($errors)) {
             return $errors;
         }
     }
 
     function submitOrder($transaction = false)
     {
-        foreach ($this->items as $item)
-        {
-            if($item->type == 'gift card')
-            {
+        foreach ($this->items as $item) {
+            if ($item->type == 'gift card') {
                 //touch giftcard
                 \CI::GiftCards()->updateAmountUsed($item->description, $item->total_price);
                 continue;
-            }
-            elseif($item->type == 'coupon')
-            {
+            } elseif ($item->type == 'coupon') {
                 //touch coupon
                 \CI::Coupons()->touchCoupon($item->description);
                 continue;
-            }
-            elseif($item->type == 'product')
-            {
+            } elseif ($item->type == 'product') {
                 //update inventory
-                if($item->track_stock)
-                {
+                if ($item->track_stock) {
                     \CI::Products()->touchInventory($item->product_id, $item->quantity);
                 }
 
                 //if this is a giftcard purchase, generate it and send it where it needs to go.
-                if($item->is_giftcard)
-                {
-                    //process giftcard
+                if ($item->is_giftcard) {
+                //process giftcard
                     $options = CI::Orders()->getItemOptions(GC::getCart()->id);
 
                     $giftCard = [];
-                    foreach($options[$item->id] as $option)
-                    {
-                        if($option->option_name == 'gift_card_amount')
-                        {
+                    foreach ($options[$item->id] as $option) {
+                        if ($option->option_name == 'gift_card_amount') {
                             $giftCard[$option->option_name] = $option->price;
-                        }
-                        else
-                        {
+                        } else {
                             $giftCard[$option->option_name] = $option->value;
                         }
                     }
@@ -801,8 +665,7 @@ class GoCart {
                 }
             }
         }
-        if(!$transaction)
-        {
+        if (!$transaction) {
             $transaction = $this->transaction();
         }
 
@@ -833,8 +696,7 @@ class GoCart {
     public function transaction($transaction = false)
     {
         //no transaction provided? create a new one and return it.
-        if(!$transaction)
-        {
+        if (!$transaction) {
             $order_number = str_replace('.', '-', microtime(true)).$this->cart->id;
             $transaction = [
                 'order_id' => $this->cart->id,
@@ -845,28 +707,21 @@ class GoCart {
             \CI::db()->insert('transactions', $transaction);
             $transaction['id'] = \CI::db()->insert_id();
 
-            return (object)$transaction;    
-        }
-        else
-        {
+            return (object)$transaction;
+        } else {
             //we have a transaction, update it with the response
-            \CI::db()->where('id',$transaction->id)->update('transactions', (array)$transaction);
+            \CI::db()->where('id', $transaction->id)->update('transactions', (array)$transaction);
         }
     }
     
     public function getTaxableTotal()
     {
         $total = 0;
-        foreach($this->items as $item)
-        {
-            if($item->taxable)
-            {
-                if(isset($item->coupon_discount))
-                {
+        foreach ($this->items as $item) {
+            if ($item->taxable) {
+                if (isset($item->coupon_discount)) {
                     $total += ($item->total_price * $item->quantity) - ($item->coupon_discount * $item->coupon_discount_quantity);
-                }
-                else
-                {
+                } else {
                     $total += ($item->total_price * $item->quantity);
                 }
             }
@@ -878,10 +733,8 @@ class GoCart {
     public function getSubtotal()
     {
         $total = 0;
-        foreach($this->items as $item)
-        {
-            if($item->type == 'product')
-            {
+        foreach ($this->items as $item) {
+            if ($item->type == 'product') {
                 $total += ($item->total_price * $item->quantity) - ($item->coupon_discount * $item->coupon_discount_quantity);
             }
         }
@@ -894,10 +747,8 @@ class GoCart {
     public function getTotalWeight()
     {
         $total = 0;
-        foreach($this->items as $item)
-        {
-            if($item->type == 'product')
-            {
+        foreach ($this->items as $item) {
+            if ($item->type == 'product') {
                 $total += ($item->total_weight * $item->quantity);
             }
         }
@@ -908,14 +759,10 @@ class GoCart {
     public function getGrandTotal()
     {
         $total = 0;
-        foreach($this->items as $item)
-        {
-            if(isset($item->coupon_discount))
-            {
+        foreach ($this->items as $item) {
+            if (isset($item->coupon_discount)) {
                 $math = ($item->total_price * $item->quantity) - ($item->coupon_discount * $item->coupon_discount_quantity);
-            }
-            else
-            {
+            } else {
                 $math = ($item->total_price * $item->quantity);
             }
             $total = $total+$math;
@@ -932,8 +779,7 @@ class GoCart {
         //remove any existing tax charges
         $this->removeItemsOfType('tax');
 
-        if($tax > 0)
-        {
+        if ($tax > 0) {
             $item = (object)['product_id'=>0, 'shippable'=>0, 'taxable'=>0, 'track_stock'=>0, 'fixed_quantity'=>1, 'type'=>'tax', 'name'=>lang('taxes'), 'total_price'=>$tax];
             $this->insertItem(['product'=>$item]);
         }
@@ -946,8 +792,7 @@ class GoCart {
 
         $shipping = (object)['product_id'=>0, 'shippable'=>0, 'taxable'=>0, 'fixed_quantity'=>1, 'type'=>'shipping', 'name'=>$key, 'total_price'=>$rate, 'description'=>$hash];
 
-        if(config_item('tax_shipping'))
-        {
+        if (config_item('tax_shipping')) {
             $shipping->taxable = 1;
         }
 
@@ -956,10 +801,8 @@ class GoCart {
 
     public function getShippingMethod()
     {
-        foreach($this->items as $item)
-        {
-            if($item->type == 'shipping')
-            {
+        foreach ($this->items as $item) {
+            if ($item->type == 'shipping') {
                 return $item;
             }
         }
@@ -968,10 +811,8 @@ class GoCart {
 
     public function orderRequiresShipping()
     {
-        foreach($this->items as $item)
-        {
-            if((bool)$item->shippable)
-            {
+        foreach ($this->items as $item) {
+            if ((bool)$item->shippable) {
                 return true;
             }
         }
@@ -983,8 +824,7 @@ class GoCart {
         global $shippingModules;
 
         $rates = [];
-        foreach($shippingModules as $shippingModule)
-        {
+        foreach ($shippingModules as $shippingModule) {
             $className = '\GoCart\Controller\\'.$shippingModule['class'];
             $rates = $rates+(new $className)->rates();
         }
@@ -993,29 +833,22 @@ class GoCart {
 
     public function testShippingMethodValidity()
     {
-        if(!$this->orderRequiresShipping())
-        {
-            //if shipping is not required, then remove any shipping methods.
+        if (!$this->orderRequiresShipping()) {
+        //if shipping is not required, then remove any shipping methods.
             $this->removeItemsOfType('shipping');
-        }
-        else
-        {
+        } else {
             $shippingExists = false;
             $shippingMethod = $this->getShippingMethod();
-            if(is_object($shippingMethod))
-            {
+            if (is_object($shippingMethod)) {
                 $shippingMethods = $this->getShippingMethodOptions();
-                foreach($shippingMethods as $key=>$rate)
-                {
-                    $hash = md5( json_encode(['key'=>$key, 'rate'=>$rate]) );
-                    if($hash == $shippingMethod->description)
-                    {
+                foreach ($shippingMethods as $key => $rate) {
+                    $hash = md5(json_encode(['key'=>$key, 'rate'=>$rate]));
+                    if ($hash == $shippingMethod->description) {
                         $shippingExists = true;
                     }
                 }
             }
-            if(!$shippingExists)
-            {
+            if (!$shippingExists) {
                 $this->removeItemsOfType('shipping');
             }
         }
@@ -1023,10 +856,8 @@ class GoCart {
 
     public function removeItemsOfType($type)
     {
-        foreach($this->items as $item)
-        {
-            if($item->type == $type)
-            {
+        foreach ($this->items as $item) {
+            if ($item->type == $type) {
                 $this->removeItem($item->id);
             }
         }
@@ -1036,10 +867,8 @@ class GoCart {
     {
         CI::Orders()->removeItem($this->cart->id, $id);
 
-        for($i=0; $i < count($this->items); $i++)
-        {
-            if($this->items[$i]->id == $id)
-            {
+        for ($i=0; $i < count($this->items); $i++) {
+            if ($this->items[$i]->id == $id) {
                 unset($this->items[$i]);
             }
         }
@@ -1052,10 +881,8 @@ class GoCart {
     {
         $count = 0;
 
-        foreach($this->items as $item)
-        {
-            if($item->type == 'product')
-            {
+        foreach ($this->items as $item) {
+            if ($item->type == 'product') {
                 $count += $item->quantity;
             }
         }
@@ -1070,18 +897,13 @@ class GoCart {
 
         $options = CI::Orders()->getItemOptions(GC::getCart()->id);
 
-        foreach($this->items as $item)
-        {
-
-            if($item->type == 'product')
-            {
-
+        foreach ($this->items as $item) {
+            if ($item->type == 'product') {
                 //grab the product from the database
                 $product = \CI::Products()->getProduct($item->product_id);
                 
-                if(empty($product))
-                {
-                    //product can no longer be found. remove it
+                if (empty($product)) {
+                //product can no longer be found. remove it
                     $this->removeItem($item->id);
                     continue;
                 }
@@ -1091,31 +913,26 @@ class GoCart {
 
                 $totalPrice = 0;
 
-                if($product->{'saleprice_'.$this->customer->group_id} > 0)
-                {
-                    //if it's on sale, give it the sale price
+                if ($product->{'saleprice_'.$this->customer->group_id} > 0) {
+                //if it's on sale, give it the sale price
                     $totalPrice = $product->{'saleprice_'.$this->customer->group_id};
-                }
-                else
-                {
+                } else {
                     //not on sale give it the normal price
                     $totalPrice = $product->{'price_'.$this->customer->group_id};
                 }
 
-                if(isset($options[$item->id]))
-                {
-                    foreach($options[$item->id] as $option)
-                    {
+                if (isset($options[$item->id])) {
+                    foreach ($options[$item->id] as $option) {
                         $totalPrice += $option->price;
                     }
                 }
                 
-                $product->id = $item->id;
-                $product->hash = $item->hash;
+                    $product->id = $item->id;
+                    $product->hash = $item->hash;
 
-                $product->total_price = $totalPrice; //updated price
+                    $product->total_price = $totalPrice; //updated price
 
-                \CI::Orders()->saveItem((array)$product);
+                    \CI::Orders()->saveItem((array)$product);
             }
         }
         $this->getCart(true); // refresh the cart and items just one more time.

@@ -141,7 +141,7 @@
                                     <td><?php echo ($hidden)?'<i class="icon-eye-slash">':'';?></i></td>
                                     <td><?php echo  $sub.$cat->name; ?></td>
                                     <?php foreach ($groups as $group):?>
-                                        <td><?php echo ($cat->{'enabled_'.$group->id})?'<i class="icon-check"></i>':'';?></td>
+                                        <td><?php echo ($cat->{'enabled'.$group->id})?'<i class="icon-check"></i>':'';?></td>
                                     <?php endforeach;?>
                                     <td class="text-center">
                                         <input type="checkbox" name="categories[]" value="<?php echo $cat->id;?>" <?php echo(in_array($cat->id, $product_categories))?'checked="checked"':'';?>/>
@@ -306,7 +306,7 @@
                         <?php echo $group->name;?>
                         <div class="checkbox pull-right" style="font-size:16px; margin-top:5px;">
                             <label>
-                                <?php echo form_checkbox('enabled_'.$group->id, 1, ${'enabled_'.$group->id}); ?> <?php echo lang('enabled');?>
+                                <?php echo form_checkbox('enabled'.$group->id, 1, ${'enabled'.$group->id}); ?> <?php echo lang('enabled');?>
                             </label>
                         </div>
                     </legend>

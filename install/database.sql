@@ -6,11 +6,11 @@ CREATE TABLE `gc_admin` (
   `username` varchar(255) NOT NULL,
   `email` varchar(128) DEFAULT NULL,
   `access` varchar(11) NOT NULL,
-  `password` varchar(40) NOT NULL,
+  `password` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-INSERT INTO `gc_admin` (`id`, `firstname`, `lastname`, `username`, `email`, `access`, `password`) VALUES ('1', '', '', 'admin', '', 'Admin', 'd033e22ae348aeb5660fc2140aec35850c4da997');
+INSERT INTO `gc_admin` (`id`, `firstname`, `lastname`, `username`, `email`, `access`, `password`) VALUES ('1', '', '', 'admin', '', 'Admin', '$2a$08$KWNdzFXN53nniFOM6SMzC.oMJEhsaVGagoHHXLD6GYlYAKF9OAoaG');
 
 CREATE TABLE `gc_banner_collections` (
   `banner_collection_id` int(4) unsigned NOT NULL AUTO_INCREMENT,
@@ -59,7 +59,7 @@ CREATE TABLE `gc_categories` (
   `image` varchar(255) DEFAULT NULL,
   `seo_title` text NOT NULL,
   `meta` text NOT NULL,
-  `enabled_1` tinyint(1) DEFAULT '0',
+  `enabled` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -4314,7 +4314,7 @@ CREATE TABLE `gc_customers` (
   `email_subscribe` tinyint(1) NOT NULL DEFAULT '0',
   `phone` varchar(32) NOT NULL,
   `company` varchar(128) NOT NULL,
-  `password` varchar(40) DEFAULT NULL,
+  `password` varchar(128) DEFAULT NULL,
   `active` tinyint(1) NOT NULL,
   `group_id` int(11) NOT NULL DEFAULT '1',
   `confirmed` tinyint(1) NOT NULL DEFAULT '0',
