@@ -1,15 +1,40 @@
-*.bak
+# Ignore vendor -> must generate with composer
+vendor
 
+# Ignore uploaded folder -> this folder contains file uploaded by an user
+assets/uploaded/*
+!assets/uploaded/index.html
+!assets/uploaded/.htaccess
+
+# Ignore cache folders
+assets/cache/*
+!assets/cache/index.html
+!assets/cache/.htaccess
 application/cache/*
 !application/cache/index.html
 !application/cache/.htaccess
 
-application/logs/*
-!application/logs/index.html
-!application/logs/.htaccess
+# Thumbnails
+._*
 
-application/config/database.php
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.git
+.VolumeIcon.icns
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+### END SPECIAL MAC ###
 application/config/manifest.php
+application/config/database.php
 
 # OS generated files #
 ######################
