@@ -10,7 +10,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | mobile device data. The array keys are used to identify the device
 | and the array values are used to set the actual name of the item.
 */
-
 $platforms = array(
 	'windows nt 10.0'	=> 'Windows 10',
 	'windows nt 6.3'	=> 'Windows 8.1',
@@ -208,5 +207,8 @@ $robots = array(
 	'CRAZYWEBCRAWLER'	=> 'Crazy Webcrawler',
 	'adsbot-google'		=> 'AdsBot Google',
 	'feedfetcher-google'	=> 'Feedfetcher Google',
-	'curious george'	=> 'Curious George'
+	'curious george'	=> 'Curious George',
+	'ia_archiver'		=> 'Alexa Crawler',
+	'MJ12bot'		=> 'Majestic-12',
+	'Uptimebot'		=> 'Uptimebot'
 );
