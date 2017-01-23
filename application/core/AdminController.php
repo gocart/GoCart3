@@ -21,7 +21,7 @@ class Admin extends \GoCart\Controller {
 
     public function view($view, $vars = [], $string=false)
     {
-        $vars['this'] = $this;
+        ///$vars['this'] = $this;
 
         if($string)
         {
@@ -44,7 +44,7 @@ class Admin extends \GoCart\Controller {
     */
     public function partial($view, $vars = [], $string=false)
     {
-        $vars['this'] = $this;
+        // $vars['this'] = $this;
         
         if($string)
         {
