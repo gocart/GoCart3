@@ -10,7 +10,7 @@ CREATE TABLE `gc_admin` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
-INSERT INTO `gc_admin` (`id`, `firstname`, `lastname`, `username`, `email`, `access`, `password`) VALUES ('1', '', '', 'admin', '', 'Admin', '$2a$08$KWNdzFXN53nniFOM6SMzC.oMJEhsaVGagoHHXLD6GYlYAKF9OAoaG');
+INSERT INTO `gc_admin` (`id`, `firstname`, `lastname`, `username`, `email`, `access`, `password`) VALUES ('1', '', '', 'admin', '', 'Admin', '$2y$10$bZ8cSKBYfQu/XK4PXj8iJOHtvKFoxbiCjYMz3bZzSrcCwEWd/p9D2');
 
 CREATE TABLE `gc_banner_collections` (
   `banner_collection_id` int(4) unsigned NOT NULL AUTO_INCREMENT,
