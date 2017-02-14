@@ -10,7 +10,7 @@ class Login extends CI_Model
         //If we don't have a customer, check for a cookie.
             if (isset($_COOKIE['GoCartCustomer'])) {
             //the cookie is there, lets log the customer back in.
-                $info = $this->aes256Decrypt(base64_decode($_COOKIE['GoCartCustomer']));
+                $info = $this->aes256Decrypt($_COOKIE['GoCartCustomer']);
                 $cred = json_decode($info);
 
                 if (is_object($cred)) {
@@ -66,7 +66,7 @@ class Login extends CI_Model
 
             if ($remember) {
                 $loginCred = json_encode(array('email'=>$customer->email, 'password'=>$customer->password));
-                $loginCred = base64_encode($this->aes256Encrypt($loginCred));
+                $loginCred = $this->aes256Encrypt($loginCred);
                 //remember the user for 6 months
                 $this->generateCookie($loginCred, strtotime('+6 months'));
             }
@@ -120,8 +120,10 @@ class Login extends CI_Model
             $key = hash('SHA256', $key, true);
         }
         $padding = 16 - (strlen($data) % 16);
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
         $data .= str_repeat(chr($padding), $padding);
-        return mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $data, MCRYPT_MODE_CBC, str_repeat("\0", 16));
+        $encrypted =  openssl_encrypt($data, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv);
+        return base64_encode($encrypted . '::' . $iv);
     }
 
     private function aes256Decrypt($data)
@@ -130,8 +132,7 @@ class Login extends CI_Model
         if (32 !== strlen($key)) {
             $key = hash('SHA256', $key, true);
         }
-        $data = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $data, MCRYPT_MODE_CBC, str_repeat("\0", 16));
-        $padding = ord($data[strlen($data) - 1]);
-        return substr($data, 0, -$padding);
+        list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
+        return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
     }
 }

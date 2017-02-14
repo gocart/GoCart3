@@ -63,7 +63,8 @@ class Auth
             if (isset($_COOKIE['GoCartAdmin'])) {
             //the cookie is there, lets log the customer back in.
                 if ($_COOKIE['GoCartAdmin']) {
-                    $result = CI::db()->select('*, sha1(username+password) as hash')->get('admin')->row_array();
+                    $result = CI::db()->select('*')->get('admin')->row_array();
+                    $result['hash'] = password_hash($result['user'].$result['password']);
                     if ($result) {
                     //unset these 2 fields
                         unset($result['password']);
@@ -110,7 +111,7 @@ class Auth
         if (password_verify($password, $result['password']) == true && sizeof($result) > 0) {
             if ($remember) {
                 //generate a remember cookie
-                $loginCred =  sha1($username.$result['password']);
+                $loginCred = password_hash($username.$result['password']);
                 $this->generateCookie($loginCred, strtotime('+6 months')); //remember the user for 6 months
             }
 
