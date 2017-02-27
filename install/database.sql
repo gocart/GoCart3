@@ -321,7 +321,8 @@ INSERT INTO `gc_countries` (`id`, `sequence`, `name`, `iso_code_2`, `iso_code_3`
 ('237', '236', 'Democratic Republic of Congo', 'CD', 'COD', '', '1', '1', '0.00'),
 ('238', '237', 'Zambia', 'ZM', 'ZMB', '', '0', '1', '0.00'),
 ('239', '238', 'Zimbabwe', 'ZW', 'ZWE', '', '0', '1', '0.00'),
-('240', '0', 'Channel Islands', 'GB', 'GBR', '', '0', '1', '0.00');
+('240', '0', 'Jersey', 'JE', 'JER', '', '0', '1', '0.00'),
+('241', '0', 'Guernsey', 'GG', 'GGY', '', '0', '1', '0.00');
 
 CREATE TABLE `gc_country_zone_areas` (
   `id` int(9) unsigned NOT NULL AUTO_INCREMENT,
@@ -4277,9 +4278,7 @@ INSERT INTO `gc_country_zones` (`id`, `country_id`, `code`, `name`, `status`, `t
 ('3953', '222', 'LDY', 'County Londonderry', '1', '0.00'),
 ('3954', '222', 'TYR', 'County Tyrone', '1', '0.00'),
 ('3955', '222', 'CMA', 'Cumbria', '1', '0.00'),
-('3956', '138', 'AG', 'Aguascalientes', '1', '0.00'),
-('3956', '240', 'GE', 'Guernsey', '1', '0.00'),
-('3956', '240', 'JE', 'Jersey', '1', '0.00');
+('3956', '138', 'AG', 'Aguascalientes', '1', '0.00');
 
 CREATE TABLE `gc_coupons` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
