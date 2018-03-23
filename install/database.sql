@@ -320,7 +320,9 @@ INSERT INTO `gc_countries` (`id`, `sequence`, `name`, `iso_code_2`, `iso_code_3`
 ('236', '235', 'Yugoslavia', 'YU', 'YUG', '', '1', '1', '0.00'),
 ('237', '236', 'Democratic Republic of Congo', 'CD', 'COD', '', '1', '1', '0.00'),
 ('238', '237', 'Zambia', 'ZM', 'ZMB', '', '0', '1', '0.00'),
-('239', '238', 'Zimbabwe', 'ZW', 'ZWE', '', '0', '1', '0.00');
+('239', '238', 'Zimbabwe', 'ZW', 'ZWE', '', '0', '1', '0.00'),
+('240', '0', 'Jersey', 'JE', 'JER', '', '0', '1', '0.00'),
+('241', '0', 'Guernsey', 'GG', 'GGY', '', '0', '1', '0.00');
 
 CREATE TABLE `gc_country_zone_areas` (
   `id` int(9) unsigned NOT NULL AUTO_INCREMENT,
