@@ -1,0 +1,21 @@
+{
+    "name": "beanstream/beanstream",
+    "description": "Beanstream PHP API",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pavel Kulbakin",
+            "email": "p.kulbakin@gmail.com"
+        },
+        {
+			"name": "Kevin Saliba"
+	    }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": {"Beanstream": "src/"}
+    }
+}

@@ -33,7 +33,7 @@ class Cod extends Front {
     function processPayment()
     {
         $errors = \GC::checkOrder();
-        if(count($errors) > 0)
+        if(!empty($errors))
         {
             echo json_encode(['errors'=>$errors]);
             return false;

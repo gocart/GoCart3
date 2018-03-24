@@ -26,7 +26,7 @@ function CodSubmitOrder()
         {
             if(data.orderId != undefined)
             {
-                window.location = '<?php echo site_url('order-complete/');?>/'+data.orderId;
+                window.location = '<?php echo site_url('order-complete');?>/'+data.orderId;
             }
         }
     }, 'json');
