@@ -70,7 +70,10 @@ class Addresses extends Front {
         if($id==0)
         {
             //if there is no set ID, the get the zones of the first country in the countries menu
-            $data['zones_menu'] = \CI::Locations()->get_zones_menu(array_shift( (array_keys($data['countries_menu'])) ));
+            $countryKeys = array_keys($data['countries_menu']);
+            $defaultCountry = array_shift($countryKeys);
+
+            $data['zones_menu'] = \CI::Locations()->get_zones_menu($defaultCountry);
         } else {
             $data['zones_menu'] = \CI::Locations()->get_zones_menu($data['country_id']);
         }
